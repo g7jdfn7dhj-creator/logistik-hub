@@ -1,7 +1,7 @@
 /* Logistik-Hub PWA service worker.
    Shell (index, manifest, icons, vendored three.js, self-hosted fonts): cache-first, versioned cache.
    Everything else — including any Arbeitzeit GET data URL and all cross-origin requests — is network-only and never cached. */
-const VERSION='lhub-pwa-v1';
+const VERSION='lhub-pwa-v2';
 const SHELL=[
 "./",
 "./index.html",

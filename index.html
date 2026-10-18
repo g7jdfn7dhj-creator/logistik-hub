@@ -159,26 +159,171 @@ button.x{min-height:22px;padding:0 6px;font-size:11px}button:disabled{opacity:.4
   background:rgba(30,39,50,.97);border:1px solid var(--line);border-left:3px solid var(--amber);padding:10px 12px;font-size:13px;line-height:1.4;box-shadow:0 6px 24px rgba(0,0,0,.45)}
 #pwaBar[hidden]{display:none}#pwaBar .t{flex:1}#pwaBar button{white-space:nowrap}
 @media print{#pwaBar,#installBtn{display:none!important}}
+
+/* ===================== UX v2 (responsive shell) ===================== */
+.xbtn{border:0;background:transparent;color:var(--mut);min-height:28px;min-width:28px;padding:0 6px;font-size:18px;line-height:1;text-transform:none;letter-spacing:0;flex:none}
+.xbtn:hover{color:var(--fg)}
+.banner{flex-wrap:nowrap;padding-block:2px}
+#banner{flex:1;min-width:0;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-block:3px}
+#addBtn{background:var(--amber);color:var(--on-amber);border-color:var(--amber);font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+#addBtn .ic{font-size:18px;line-height:1;font-weight:600}
+#menuBtn{font-size:18px;padding:2px 10px;text-transform:none;letter-spacing:0}
+.menu{position:fixed;z-index:70;top:calc(env(safe-area-inset-top,0px) + 50px);right:max(10px,env(safe-area-inset-right,0px));width:min(330px,calc(100vw - 20px));max-height:calc(100vh - 70px);overflow:auto;
+  background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--amber);box-shadow:0 10px 30px rgba(0,0,0,.55);padding:12px;display:flex;flex-direction:column;gap:10px;font-size:14px}
+.menu .mrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.menu label.ck{font-size:14px;color:var(--fg);min-height:36px}
+.menu .clockM{font-family:var(--f-mono);font-size:13px;color:var(--mut)}
+.menu .mb{width:100%;text-align:left}
+#warn{top:58px}
+#warn div{pointer-events:auto;display:flex;align-items:center;gap:4px}
+#warn .xbtn{min-height:22px;min-width:22px;font-size:15px;padding:0 2px}
+.empty{pointer-events:auto;z-index:4}
+.empty .ehead{display:flex;gap:10px;align-items:flex-start}.empty .ehead>span{flex:1}
+.empty .ehead .xbtn{margin:-6px -10px 0 0}
+.empty .rowb{margin-top:10px}
+.hint{display:flex;gap:6px;align-items:flex-start}.hint>div{flex:1}.hint .xbtn{margin:-4px -8px 0 0}
+#stageTools{position:absolute;top:10px;right:max(10px,env(safe-area-inset-right,0px));display:flex;gap:6px;z-index:6}
+#stageTools button{background:rgba(22,29,38,.88);min-width:40px;font-size:16px;text-transform:none;letter-spacing:.02em}
+#panelShow{display:none}
+body.pcol[data-scene="hub"] #panelShow{display:inline-block}
+body.fs #stage{position:fixed;inset:0;z-index:55;height:auto!important;flex:none;background:var(--bg)}
+body.fs #stageTools{top:max(10px,env(safe-area-inset-top,0px))}
+body.nohints #bannerRow,body.nohints #emptyMsg,body.nohints #warn,body.nohints #campusHint,body.nohints .keys{display:none!important}
+#hudWrap{position:relative;border-bottom:1px solid var(--line);background:var(--line)}
+#hudWrap .hud{border-bottom:0;margin-right:38px}
+#hudBtn{position:absolute;right:0;top:0;bottom:0;width:38px;min-height:0;border:0;border-left:1px solid var(--line);border-radius:0;background:var(--panel);padding:0;font-size:14px;color:var(--mut);text-transform:none}
+#hudWrap.c .hud{display:none}
+#hudWrap.c #hudBtn{position:static;display:block;width:100%;height:34px;min-height:34px;border-left:0;text-align:left;padding:0 14px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+#split{flex:none;width:7px;cursor:col-resize;background:var(--panel2);border-left:1px solid var(--line);touch-action:none;position:relative}
+#split::after{content:"";position:absolute;left:2px;top:50%;width:1px;height:36px;margin-top:-18px;background:var(--mut);box-shadow:2px 0 0 var(--mut)}
+#split:hover,#split.drag,#split:focus-visible{background:#3a3220}
+#panel{border-left:0}
+body.pcol #panel,body.pcol #split{display:none!important}
+@media (min-width:901px){#panel{width:var(--pw,560px)}}
+@media (min-width:901px) and (max-width:1250px){#panel{width:var(--pw,470px)}}
+.kpis{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.charts{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.tabs button .ti{display:none}
+#tabs button[data-tab="entry"]{color:var(--amber)}
+.flash{animation:flash 1.8s ease-out}
+@keyframes flash{0%,40%{box-shadow:0 0 0 3px var(--amber)}100%{box-shadow:0 0 0 0 transparent}}
+.lnk{border:0;padding:2px 0;min-height:0;text-transform:none;letter-spacing:.01em;color:var(--amber);text-align:left;font-size:13px;background:none;text-decoration:underline dotted;text-underline-offset:3px}
+.kpi[data-jump]{cursor:pointer}.kpi[data-jump] em{color:var(--amber)}
+.qcard{border:1px solid var(--line);border-left:3px solid var(--amber);background:var(--panel2);padding:10px;margin-bottom:12px}
+.qcard h3{color:var(--fg)}
+.qcard .seg{margin-bottom:8px}
+.dtw{display:flex;gap:6px;min-width:0}.dtw input{flex:1;min-width:0}
+button.now{white-space:nowrap;text-transform:none}
+#entSeg{display:grid;grid-template-columns:repeat(4,1fr)}
+.big{font-size:14px;padding:6px 14px}
+td .pri,td button{vertical-align:middle}
+td.wrap{white-space:normal}
+@media (max-width:900px){
+  #main{flex-direction:column}
+  body[data-scene="hub"] #stage{flex:none;height:44vh;height:44dvh}
+  #main:has(#panel.collapsed) #stage{flex:1;height:auto}
+  #panel{flex:1;max-height:none!important;min-height:0;width:auto}
+  #panel.collapsed{flex:none}
+  .ptop{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.ptop::-webkit-scrollbar{display:none}
+  .ptop>*{flex:none}.ptop .sp{flex:1 0 4px}
+  #split{display:none}
+  .tabs{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}.tabs::-webkit-scrollbar{display:none}
+  .tabs button{flex:0 0 auto;min-width:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;font-size:11.5px;padding:4px 8px;letter-spacing:.04em}
+  .tabs button .ti{display:block;font-size:17px;line-height:1.1;letter-spacing:0}
+  #sheetBtn{width:48px}
+  .empty{top:auto;bottom:10px;transform:translateX(-50%);width:calc(100% - 20px);max-width:440px;padding:10px 12px;font-size:13.5px}
+  .src{font-size:11px}.kpi em{font-size:11px}.stat span{font-size:11px}
+  .campusui{bottom:max(10px,env(safe-area-inset-bottom,0px))}
+}
+@media (pointer:coarse),(max-width:900px){
+  button{min-height:44px}.seg.sm button{min-height:44px}button.x{min-height:44px;min-width:44px}
+  .xbtn{min-height:44px;min-width:44px}.lnk{min-height:44px;display:inline-flex;align-items:center}
+  #warn .xbtn{min-height:32px;min-width:32px}
+  input[type=number],input[type=url],input[type=text],input[type=time],input[type=datetime-local],input[type=search],select{min-height:44px;font-size:16px}
+  input[type=number]{width:104px}.pgrid input[type=time]{width:116px}
+  label.ck{min-height:44px}label.ck input{width:22px;height:22px}
+  #installBtn{min-height:44px}
+  .tabs button{min-height:52px}
+  #hudBtn{width:44px}#hudWrap .hud{margin-right:44px}
+}
+@media (max-width:600px),(orientation:landscape) and (max-height:520px){
+  header{flex-wrap:nowrap;gap:6px;padding-block:4px}
+  h1{font-size:15px;letter-spacing:.03em}h1 .r4,h1 small{display:none}
+  .hright .clock,.hright #lang,#installBtn{display:none!important}
+  .hright{gap:6px}
+  #modeSeg button{padding:2px 9px;font-size:12px}
+  #addBtn .lbl{display:none}#addBtn{min-width:46px;justify-content:center;padding:0 10px}
+  .hud{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.hud::-webkit-scrollbar{display:none}
+  .hud .stat{flex:0 0 auto;min-width:118px}
+  .banner{font-size:12.5px}
+  #banner{flex-wrap:nowrap;overflow:hidden}#banner>span:not(.tag){overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+}
+@media (max-width:600px){
+  .eform{grid-template-columns:1fr;gap:3px}.eform label{margin-top:5px;font-size:13px}
+  .pgrid{grid-template-columns:minmax(0,1fr) auto 3.8em;font-size:13.5px}
+  .kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}
+  .tabc{padding:10px max(12px,env(safe-area-inset-left,0px)) 28px}
+  #entSeg button{font-size:12px;padding:2px 4px}
+}
+@media (orientation:landscape) and (max-height:520px){
+  #main{flex-direction:row}
+  body[data-scene="hub"] #stage{flex:1;height:auto}
+  #panel{flex:none;width:min(50vw,470px);border-top:0;border-left:1px solid var(--line);padding-right:env(safe-area-inset-right,0px)}
+  #panel.collapsed .tabc{display:block}#sheetBtn{display:none!important}
+  .tabs button{min-height:46px;min-width:64px}
+  .hud .stat{padding:3px 8px}.stat b{font-size:13px}
+  .legend{display:none}
+}
+@media (min-width:1600px){.kpi b{font-size:18px}#panel{width:var(--pw,680px)}}
+
+.kpi em{font-size:11px}#staffPlanT small{font-size:11px}
+@media (max-width:900px) and (orientation:portrait){
+  body[data-tab="entry"][data-scene="hub"] #stage,body[data-tab="params"][data-scene="hub"] #stage,body[data-tab="staff"][data-scene="hub"] #stage,body[data-tab="data"][data-scene="hub"] #stage{height:24vh;height:24dvh}
+  body[data-tab="entry"] #emptyMsg,body[data-tab="params"] #emptyMsg,body[data-tab="staff"] #emptyMsg,body[data-tab="data"] #emptyMsg{display:none!important}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .hud .stat{display:flex;align-items:center;gap:6px;min-width:150px;padding:2px 8px;min-height:44px}.hud .stat b{margin:0}.hud .meter{display:none}
+  .empty{max-width:360px;font-size:12.5px;padding:6px 10px}.empty .rowb{margin-top:4px}
+  #bannerRow{display:none!important}.lg{display:none}.sh{display:inline}
+}
+.keys{right:70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media print{#hudBtn,#stageTools,#split,#menu,#addBtn,#menuBtn,.xbtn{display:none!important}}
 </style></head><body data-scene="campus" data-dm="fact">
 <header class="pad">
-  <h1>Logistik-Hub R4<small id="sub"></small></h1>
+  <h1>Logistik-Hub<span class="r4"> R4</span><small id="sub"></small></h1>
   <div class="seg sm" id="modeSeg" data-tip="tip_mode"><button data-m="fact"><span class="lg" data-t="m_fact"></span><span class="sh" data-t="m_factS"></span></button><button data-m="sim"><span class="lg" data-t="m_sim"></span><span class="sh" data-t="m_simS"></span></button></div>
+  <button id="addBtn" data-entry="cur" data-tip="ux_addTip"><span class="ic" aria-hidden="true">+</span><span class="lbl" data-t="ux_add"></span></button>
   <div class="hright"><button id="installBtn" class="pri" hidden>⤓ Установить приложение</button><div class="clock" id="clock"></div>
-    <div class="seg sm" id="lang"><button data-l="ru">RU</button><button data-l="de">DE</button></div></div>
+    <div class="seg sm" id="lang"><button data-l="ru">RU</button><button data-l="de">DE</button></div><button id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="menu" data-tip="ux_menu">☰</button></div>
 </header>
-<div class="banner pad" id="banner"></div>
-<div class="hud hubonly" id="hud"></div>
+<div id="menu" class="menu" hidden role="dialog" aria-label="menu">
+  <div class="mrow"><span class="clockM" id="clockM"></span></div>
+  <div class="mrow"><span data-t="ux_lang"></span><div class="seg sm" id="langM"><button data-l="ru">RU</button><button data-l="de">DE</button></div></div>
+  <button id="installM" class="pri mb" hidden></button>
+  <button id="addM" class="mb" data-entry="cur" data-t="ux_addData2"></button>
+  <label class="ck"><input type="checkbox" id="hintsCk"><span data-t="ux_hideHints"></span></label>
+  <label class="ck"><input type="checkbox" id="hudCk"><span data-t="ux_showKpi"></span></label>
+  <button id="fsM" class="mb" data-t="ux_fs"></button>
+  <button id="panelM" class="mb" data-t="ux_panel"></button>
+  <button id="wideM" class="mb" data-t="ux_wide"></button>
+  <button id="restoreM" class="mb" data-t="ux_restore"></button>
+  <div class="note" data-t="ux_keysNote"></div>
+</div>
+<div class="banner pad" id="bannerRow"><div id="banner"></div><button class="xbtn" id="bannerX" data-x="banner" aria-label="×">×</button></div>
+<div id="hudWrap" class="hubonly"><div class="hud" id="hud"></div><button id="hudBtn" aria-expanded="true" aria-controls="hud">▴</button></div>
 <div id="main">
 <div id="stage">
   <div class="legend hubonly" id="legend"></div>
   <div id="warn" class="hubonly"></div>
   <div class="empty hubonly" id="emptyMsg" hidden></div>
   <div class="keys hubonly" data-t="keys"></div>
-  <div class="campusui campusonly"><div class="hint"><span data-t="hint"></span><small data-t="hint2"></small></div><div class="blist" id="blist"></div></div>
+  <div class="campusui campusonly"><div class="hint" id="campusHint"><div><span data-t="hint"></span><small data-t="hint2"></small></div><button class="xbtn" data-x="campusHint" aria-label="×">×</button></div><div class="blist" id="blist"></div></div>
   <div id="bLabel" hidden></div>
   <div id="card" hidden><div role="dialog" aria-modal="true" aria-labelledby="cardT"><h2 id="cardT"></h2><div class="soon" data-t="soon"></div><p data-t="soonTxt"></p><button id="cardX" class="pri" data-t="close"></button></div></div>
+  <div id="stageTools"><button id="panelShow" data-t="ux_panelShow"></button><button id="fsBtn" aria-pressed="false" data-tip="ux_fsT">⤢</button></div>
   <div id="fade"></div>
 </div>
+<div id="split" class="hubonly" role="separator" aria-orientation="vertical" tabindex="0" data-tip="ux_split"></div>
 <aside id="panel" class="hubonly">
   <div class="ptop">
     <button id="backBtn" class="pri" data-t="back" data-tip="tip_back"></button>
@@ -191,6 +336,7 @@ button.x{min-height:22px;padding:0 6px;font-size:11px}button:disabled{opacity:.4
   </div>
   <div class="tabsrow"><div class="tabs" role="tablist" id="tabs"></div><button id="sheetBtn" aria-label="toggle">▾</button></div>
   <div class="tabc" id="tab-ov" role="tabpanel"><div id="simGate" class="simonly" hidden></div>
+    <div class="qcard factonly" id="ovStart" hidden><h3 data-t="ux_startH"></h3><div class="note" data-t="ux_startTxt" style="margin:0 0 8px"></div><div class="rowb"><button class="pri big" data-entry="truck" data-t="ux_addData2"></button><button data-go="data" data-t="ux_loadFile"></button><button data-go="params" data-t="ux_toParams"></button><button data-go="staff" data-t="ux_toStaff"></button></div></div>
     <div class="rowb" style="margin-bottom:8px"><h3 style="margin:0" data-t="per"></h3><div class="seg sm" id="perSeg"><button data-p="shift" data-t="per_shift"></button><button data-p="day" data-t="per_day"></button><button data-p="all" data-t="per_all"></button></div></div><div class="note" id="perNote" style="margin:-4px 0 8px"></div>
     <div class="sec"><h3 data-t="alertsH"></h3><div class="alerts" id="alerts"></div></div>
     <div class="sec"><h3 data-t="kpiH"></h3><div class="kpis" id="kpis"></div></div>
@@ -208,14 +354,15 @@ button.x{min-height:22px;padding:0 6px;font-size:11px}button:disabled{opacity:.4
       <div class="tw"><table><thead><tr><th class="l" data-t="c_id"></th><th class="l" data-t="o_cust"></th><th data-t="o_created"></th><th data-t="o_due"></th><th data-t="c_pal"></th><th class="l" data-t="c_status"></th><th data-t="o_left"></th><th class="l" data-t="c_src"></th></tr></thead><tbody id="orderT"></tbody></table></div></div>
   </div>
   <div class="tabc" id="tab-prod" role="tabpanel" hidden>
-    <div class="sec"><h3 data-t="prodH"></h3><table><thead><tr><th class="l" data-t="p_hall"></th><th class="l" data-t="p_order"></th><th class="l" data-t="p_phase"></th><th data-t="p_prog"></th><th data-t="p_plan"></th><th data-t="p_act"></th><th data-t="p_pct"></th><th class="l" data-t="c_src"></th></tr></thead><tbody id="prodT"></tbody></table><div class="note" data-t="p_click"></div></div>
+    <div class="sec"><h3 data-t="prodH"></h3><table><thead><tr><th class="l" data-t="p_hall"></th><th class="l" data-t="p_order"></th><th class="l" data-t="p_phase"></th><th data-t="p_prog"></th><th data-t="p_plan"></th><th data-t="p_act"></th><th data-t="p_pct"></th><th class="l" data-t="c_src"></th></tr></thead><tbody id="prodT"></tbody></table><div class="note" data-t="p_click"></div><div class="rowb" style="margin-top:8px"><button class="pri" data-entry="production" data-t="ux_addProd"></button></div></div>
   </div>
   <div class="tabc" id="tab-staff" role="tabpanel" hidden>
     <div class="sec simonly"><h3 data-t="staffNowSim"></h3><div class="staffc" id="staffNow"></div></div>
-    <div class="sec"><h3 data-t="staffPlan"></h3><table id="staffPlanT"></table><div class="note err" id="staffStat"></div><div class="note" data-t="staffPlanNote"></div></div>
+    <div class="sec"><h3 data-t="staffPlan"></h3><div class="note" data-t="ux_staffHint" style="margin:-2px 0 6px"></div><table id="staffPlanT"></table><div class="note err" id="staffStat"></div><div class="note" data-t="staffPlanNote"></div></div>
   </div>
   <div class="tabc" id="tab-data" role="tabpanel" hidden>
     <div class="sec"><h3 data-t="dataH"></h3><div class="note" data-t="dataNote"></div></div>
+    <div class="qcard"><h3 data-t="ux_manualH"></h3><div class="rowb"><button class="pri big" data-entry="truck" data-t="ux_addData2"></button><button data-go="params" data-t="ux_toParams"></button><button data-go="staff" data-t="ux_toStaff"></button></div></div>
     <div class="sec"><h3 data-t="az_h"></h3>
       <div class="rowb"><button id="azSync" class="pri" data-t="az_sync" data-tip="tip_azSync"></button><button id="azCsvBtn" data-t="az_csv" data-tip="tip_azCsv"></button><input type="file" id="azCsv" accept=".csv,text/csv,text/plain" hidden></div>
       <div class="note" id="azAvail"></div><div class="note" id="azStat"></div>
@@ -234,8 +381,19 @@ button.x{min-height:22px;padding:0 6px;font-size:11px}button:disabled{opacity:.4
     <details><summary data-t="helpH"></summary><div class="help" id="help"></div></details>
   </div>
   <div class="tabc" id="tab-entry" role="tabpanel" hidden>
-    <div class="sec"><h3 data-t="entryH"></h3><div class="note" data-t="entryNote"></div></div>
+    <div class="sec"><h3 data-t="entryH"></h3><div class="note" data-t="entryNote"></div>
+      <div class="rowb" style="margin-top:8px"><button data-go="params" data-t="ux_toParams"></button><button data-go="staff" data-t="ux_toStaff"></button></div></div>
     <div class="seg sm" id="entSeg" style="margin-bottom:8px"><button data-e="truck" data-t="e_truck"></button><button data-e="order" data-t="e_order"></button><button data-e="production" data-t="e_production"></button><button data-e="stock" data-t="e_stock"></button></div>
+    <div class="qcard" id="qTruck"><h3 data-t="q_h"></h3>
+      <div class="seg" id="qDir"><button data-v="in" data-t="f_in"></button><button data-v="out" data-t="f_out"></button></div>
+      <div class="seg" id="qEv"><button data-v="actual_arrival" data-t="q_arr"></button><button data-v="docked_at" data-t="q_dock"></button><button data-v="departed_at" data-t="q_dep"></button></div>
+      <div class="eform"><label for="qId" data-t="q_id"></label><input type="text" id="qId" list="qIds" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="done">
+        <label for="qDock" data-t="ef_dock"></label><select id="qDock"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+        <label for="qTime" data-t="q_time"></label><div class="dtw"><input type="datetime-local" id="qTime"><button type="button" class="now" data-now="qTime" data-t="ux_now"></button></div>
+        <label for="qPal" data-t="ef_pallets"></label><input type="number" id="qPal" min="0" step="1" inputmode="numeric" placeholder="—"></div>
+      <datalist id="qIds"></datalist>
+      <div class="rowb"><button class="pri big" id="qSave" data-t="q_save"></button></div><div class="note" data-t="q_note"></div><div class="note" id="qStat" role="status"></div></div>
+    <h3 id="entFormH" data-t="ux_fullForm"></h3>
     <div class="eform" id="entForm"></div>
     <div class="rowb"><button id="entSave" class="pri"></button><button id="entCancel" data-t="e_cancel" hidden></button></div><div class="note" id="entStat"></div>
     <div class="sec" style="margin-top:10px"><h3 data-t="e_list"></h3><div class="tw"><table><tbody id="entT"></tbody></table></div></div>
@@ -1217,9 +1375,12 @@ const notSet=()=>`<span class="mut">${T('notSet')}</span>`;
 
 /* ================= TABS ================= */
 const TABS=['ov','docks','orders','prod','staff','data','entry','parts','params','report'];let curTab='ov';
-$('tabs').innerHTML=TABS.map(t=>`<button role="tab" data-tab="${t}" data-t="tab_${t}" aria-selected="${t==='ov'}"></button>`).join('');
-function showTab(t){curTab=t;document.querySelectorAll('#tabs button').forEach(b=>{const on=b.dataset.tab===t;b.setAttribute('aria-selected',on);$('tab-'+b.dataset.tab).hidden=!on});
-  $('panel').classList.remove('collapsed');$('sheetBtn').textContent='▾';if(t==='entry')buildEntry();if(t==='data')renderAzAvail();renderPanel(true)}
+const TAB_IC={ov:'◫',docks:'⇆',orders:'▤',prod:'▣',staff:'☺\uFE0E',data:'⇩',entry:'✚',parts:'⌕',params:'⚙\uFE0E',report:'⎙'};
+$('tabs').innerHTML=TABS.map(t=>`<button role="tab" data-tab="${t}" aria-selected="${t==='ov'}"><span class="ti" aria-hidden="true">${TAB_IC[t]}</span><span data-t="tab_${t}"></span></button>`).join('');
+function showTab(t){curTab=t;document.body.dataset.tab=t;document.querySelectorAll('#tabs button').forEach(b=>{const on=b.dataset.tab===t;b.setAttribute('aria-selected',on);$('tab-'+b.dataset.tab).hidden=!on});
+  $('panel').classList.remove('collapsed');$('sheetBtn').textContent='▾';if(t==='entry')buildEntry();if(t==='data')renderAzAvail();renderPanel(true);
+  const tb=$('tabs'),ab=tb.querySelector('[data-tab="'+t+'"]');if(ab&&tb.scrollWidth>tb.clientWidth){const l=ab.offsetLeft-tb.offsetLeft,r=l+ab.offsetWidth;if(l<tb.scrollLeft)tb.scrollLeft=l-8;else if(r>tb.scrollLeft+tb.clientWidth)tb.scrollLeft=r-tb.clientWidth+8}}
+const setH=(el,h)=>{if(el.innerHTML!==h)el.innerHTML=h};   // write only on change: keeps taps/focus alive between 0.5 s refreshes
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 $('sheetBtn').onclick=()=>{const c=$('panel').classList.toggle('collapsed');$('sheetBtn').textContent=c?'▴':'▾'};
 document.querySelectorAll('#perSeg button').forEach(b=>b.onclick=()=>{period=b.dataset.p;segSel('perSeg','p',period);renderPanel(true)});
@@ -1248,10 +1409,16 @@ function renderTop(ds,K){
   $('banner').innerHTML=dmode==='sim'
     ?`<span class="tag">${T('m_sim')}</span><span>${simOn?T('ban_sim'):T('ban_simOff')}</span>${paused&&simOn?'<span class="mut">· '+T('ban_paused')+'</span>':''}`
     :`<span class="tag">${T('m_fact')}</span><span>${nonPart?T('ban_fact'):T('ban_fact_none')}</span>${lastLoad?'<span class="mut">· '+T('ban_last')+': '+fmtDT(lastLoad)+'</span>':''}`;
-  let em=null;
-  if(dmode==='fact'&&!nonPart)em=esc(T('emptyFact'));
-  else if(dmode==='sim'&&!simOn){const miss=simMissing();em=miss.length?esc(T('simNeed'))+'<ul>'+miss.slice(0,8).map(m=>'<li>'+esc(missText(m))+'</li>').join('')+(miss.length>8?'<li>… +'+(miss.length-8)+'</li>':'')+'</ul>':esc(T('simReady'))}
-  $('emptyMsg').hidden=!em;if(em&&$('emptyMsg').innerHTML!==em)$('emptyMsg').innerHTML=em;
+  $('bannerX').dataset.x='banner:'+dmode;$('bannerRow').hidden=uxDismissed('banner:'+dmode);
+  if(!$('menu').hidden)setH($('clockM'),$('clock').innerHTML);
+  /* stage overlay: short text + direct links; never the full parameter list (that lives in the panel) */
+  let em=null,ek='';
+  if(dmode==='fact'&&!nonPart){ek='fact';em=`<div class="ehead"><span>${esc(T('ux_emptyFact'))}</span>${XB('em:fact')}</div><div class="rowb"><button class="pri" data-entry="truck">${T('ux_addData2')}</button><button data-go="data">${T('ux_loadFile')}</button></div>`}
+  else if(dmode==='sim'&&!simOn){const miss=simMissing();ek=miss.length?'simmiss':'simready';
+    em=miss.length?`<div class="ehead"><span>${esc(T('ux_simMiss').replace('%n',miss.length))}</span>${XB('em:simmiss')}</div><div class="rowb"><button class="pri" data-gate="1">${T('ux_setParams')}</button></div>`
+      :`<div class="ehead"><span>${esc(T('simReady'))}</span>${XB('em:simready')}</div><div class="rowb"><button class="pri" data-start="1">▶ ${T('simStart')}</button></div>`}
+  if(em&&uxDismissed('em:'+ek))em=null;
+  $('emptyMsg').hidden=!em;if(em)setH($('emptyMsg'),em);
   $('simStartBtn').disabled=simOn;$('pauseBtn').disabled=!simOn;$('resetBtn').disabled=!simOn;
 }
 function renderLegend(){const it=dmode==='sim'
@@ -1262,9 +1429,9 @@ function renderLegend(){const it=dmode==='sim'
 /* ================= SIM GATE ================= */
 function renderGate(){const g=$('simGate');if(dmode!=='sim'){g.hidden=true;return}
   if(simOn){g.hidden=true;return}g.hidden=false;const miss=simMissing();
-  g.innerHTML=miss.length?`<b>${T('simNeed')}</b><ul class="miss">${miss.map(m=>'<li>'+esc(missText(m))+'</li>').join('')}</ul><div class="rowb"><button class="pri" data-go="params">${T('toParams')}</button><button data-go="staff">${T('toStaff')}</button></div>`
-    :`<b>${T('simReady')}</b><div class="rowb"><button class="pri" id="gateStart">▶ ${T('simStart')}</button></div>`;
-  g.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showTab(b.dataset.go));const gs=$('gateStart');if(gs)gs.onclick=doStart}
+  setH(g,miss.length?`<b>${T('simNeed')}</b><div class="note" style="margin:2px 0 0">${T('ux_tapMiss')}</div><ul class="miss">${miss.map(m=>'<li><button class="lnk" data-jump="'+esc(missSel(m))+'">'+esc(missText(m))+' ›</button></li>').join('')}</ul><div class="rowb"><button class="pri" data-go="params">${T('toParams')}</button><button data-go="staff">${T('toStaff')}</button></div>`
+    :`<b>${T('simReady')}</b><div class="rowb"><button class="pri" data-start="1">▶ ${T('simStart')}</button></div>`)}
+function missSel(m){return m.k==='shifts'?'#ps-0':m.k==='staff'?'#staffPlanT input[data-n="'+m.n+'"][data-r="'+m.r+'"]':'#pi-'+m.k}
 function doStart(){const miss=startSim();if(miss.length){showTab('ov');renderAll();return}simStartMs=simNow();setPause(false);showHalls();renderAll()}
 $('simStartBtn').onclick=doStart;
 
@@ -1272,13 +1439,14 @@ $('simStartBtn').onclick=doStart;
 function kpiVal(K,d){const v=K[d.k];if(v===null||v===undefined)return null;return v}
 function alertsOf(K){const A=[];for(const d of KPIS){const v=kpiVal(K,d);if(v===null)continue;if(d.bad(K))A.push(T('k_'+d.k)+': '+fmtN(v,d.d)+(d.u?' '+unitT(d.u):'')+' ('+T('thr')+' '+d.th()+')')}return A}
 const unitT=u=>u==='min'?T('u_min'):u==='d'?T('u_d'):u;
-function renderOverview(ds,K){renderGate();
+const KTH={occ:'th_rackLo',doc:'th_doc',dts:'th_dts',turn:'th_turn',wait:'th_waitMin',punct:'th_punct',waiting:'th_wait',backlog:'th_backlog',overdue:'th_overdue',onTime:'th_onTime',fill:'th_fill',outVsPlan:'th_out',util:'th_util'};
+function renderOverview(ds,K){renderGate();$('ovStart').hidden=!(dmode==='fact'&&!FACT.some(r=>r.type!=='part'));
   $('perNote').textContent=period==='shift'&&!shiftsSet()?T('noShiftsNote'):'';
-  const A=alertsOf(K);$('alerts').innerHTML=A.length?A.map(a=>'<div>'+esc(a)+'</div>').join(''):'<div class="note" style="border:0;background:none;padding:0">'+T('noAlerts')+'</div>';
-  $('kpis').innerHTML=KPIS.map(d=>{const v=kpiVal(K,d);const cls=v===null?'na':d.bad(K)?'bad':'';
-    return`<div class="kpi ${cls}"><span title="${esc(T('k_'+d.k))}">${T('k_'+d.k)}</span><b>${fmtN(v,d.d)}</b><small>${v===null?'':unitT(d.u)}</small><em>${esc(d.th())}</em></div>`}).join('');
+  const A=alertsOf(K);setH($('alerts'),A.length?A.map(a=>'<div>'+esc(a)+'</div>').join(''):'<div class="note" style="border:0;background:none;padding:0">'+T('noAlerts')+'</div>');
+  setH($('kpis'),KPIS.map(d=>{const v=kpiVal(K,d);const cls=v===null?'na':d.bad(K)?'bad':'';const th=KTH[d.k];const j=th&&!has(P[th])&&!(d.k==='occ'&&has(P.th_rackHi))?` data-jump="#pi-${th}" role="button" tabindex="0" title="${esc(T('ux_setThr'))}"`:'';
+    return`<div class="kpi ${cls}"${j}><span title="${esc(T('k_'+d.k))}">${T('k_'+d.k)}</span><b>${fmtN(v,d.d)}</b><small>${v===null?'':unitT(d.u)}</small><em>${esc(d.th())}</em></div>`}).join(''));
   drawCharts();
-  if(!shiftsSet()){$('shiftT').innerHTML=`<tr><td class="l mut" colspan="5">${T('paramNotSet')}: ${T('p_shifts')}</td></tr>`;return}
+  if(!shiftsSet()){setH($('shiftT'),`<tr><td class="l mut wrap" colspan="5">${T('paramNotSet')}: ${T('p_shifts')} <button class="pri" data-jump="#ps-0">${T('ux_set')}</button></td></tr>`);return}
   const H=dmode==='sim'?histS:histF;let rows='',sh=shiftAt(nowMs());const cur=sh?sh.k:null;
   for(let i=0;i<6&&sh;i++){if(dmode==='sim'&&(!simOn||sh.b<=simStartMs))break;const S=compute(ds,sh.a,sh.b);
     const mbv=H.filter(p=>p.t>=sh.a&&p.t<sh.b&&p.back!==null).map(p=>p.back);if(sh.k===cur&&S.backlog!==null)mbv.push(S.backlog);
@@ -1326,11 +1494,11 @@ function drawGantt(ds){const cv=$('gantt');const w=cv.clientWidth;if(!w)return;c
 function renderTrucks(ds){const now=ds.now,[a,b]=curWin(now);
   const list=ds.trucks.filter(t=>t.dir===truckDir).filter(t=>{const st=truckStatus(t,now);const ts=[t.planned,t.arrival,t.docked,t.departed].filter(Boolean);
     return st==='waiting'||st==='docked'||!ts.length||ts.some(x=>x>=a-2*3600e3&&x<=b)}).sort((x,y)=>(x.planned||x.arrival||0)-(y.planned||y.arrival||0)).slice(-150);
-  $('truckT').innerHTML=list.length?list.map(t=>{const st=truckStatus(t,now);const dl=t.planned&&t.arrival?(t.arrival-t.planned)/60000:(t.planned&&!t.arrival&&now>t.planned?(now-t.planned)/60000:null);
+  setH($('truckT'),list.length?list.map(t=>{const st=truckStatus(t,now);const dl=t.planned&&t.arrival?(t.arrival-t.planned)/60000:(t.planned&&!t.arrival&&now>t.planned?(now-t.planned)/60000:null);
     const late=dl!==null&&tolOk()&&Math.abs(dl)>P.punctTol;
     return`<tr><td class="l">${esc(t.id)}</td><td class="l mut">${esc(t.plate)}</td><td>${t.dock?(t.dir==='in'?'WE-':'WA-')+t.dock:'—'}</td><td>${fmtT(t.planned,now)}</td><td>${fmtT(t.arrival,now)}</td>
       <td class="${late?'bad':dl!==null&&tolOk()?'good':''}">${dl===null?'—':(dl>0?'+':'')+Math.round(dl)}</td><td>${fmtT(t.docked,now)}</td><td>${fmtT(t.departed,now)}</td><td>${dash(t.pallets)}</td><td class="l">${T('st_'+st)}</td><td class="l">${srcBadge(t)}</td></tr>`}).join('')
-    :`<tr><td class="l mut" colspan="11">${T('emptyData')}</td></tr>`}
+    :`<tr><td class="l mut wrap" colspan="11">${T('emptyData')}<div class="rowb" style="margin-top:6px"><button class="pri" data-entry="truck">${T('ux_addTruck')}</button><button data-go="data">${T('ux_loadFile')}</button></div></td></tr>`)}
 
 /* ================= ORDERS ================= */
 function renderOrders(ds,K){const now=ds.now,[a,b]=periodWin();
@@ -1339,20 +1507,20 @@ function renderOrders(ds,K){const now=ds.now,[a,b]=periodWin();
   let list=ds.orders.filter(o=>o.status!=='shipped'&&(!o.created||o.created<=now)).sort((x,y)=>(x.due||9e15)-(y.due||9e15));
   if($('showShipped').checked)list=list.concat(ds.orders.filter(o=>o.status==='shipped'&&(inWin(o.shipped,a,b)||!o.shipped)).sort((x,y)=>(y.shipped||0)-(x.shipped||0)));
   list=list.slice(0,150);
-  $('orderT').innerHTML=list.length?list.map(o=>{const late=o.status!=='shipped'&&o.due&&o.due<now;const left=o.due&&(o.status!=='shipped'||o.shipped)?((o.status==='shipped'?o.shipped:now)-o.due)/-60000:null;
+  setH($('orderT'),list.length?list.map(o=>{const late=o.status!=='shipped'&&o.due&&o.due<now;const left=o.due&&(o.status!=='shipped'||o.shipped)?((o.status==='shipped'?o.shipped:now)-o.due)/-60000:null;
     const st=late?T('o_late'):T('o_'+o.status);
     return`<tr><td class="l">${esc(o.id)}</td><td class="l mut">${esc(o.customer)}</td><td>${fmtT(o.created,now)}</td><td>${fmtT(o.due,now)}</td><td>${dash(o.shippedPallets)}/${dash(o.pallets)}</td>
       <td class="l ${late?'bad':o.status==='shipped'&&o.shipped&&o.due?(o.shipped<=o.due?'good':'bad'):''}">${st}</td><td class="${left!==null&&left<0?'bad':''}">${left===null?'—':fmtDur(left)}</td><td class="l">${srcBadge(o)}</td></tr>`}).join('')
-    :`<tr><td class="l mut" colspan="8">${T('emptyData')}</td></tr>`}
+    :`<tr><td class="l mut wrap" colspan="8">${T('emptyData')}<div class="rowb" style="margin-top:6px"><button class="pri" data-entry="order">${T('ux_addOrder')}</button><button data-go="data">${T('ux_loadFile')}</button></div></td></tr>`)}
 
 /* ================= PRODUCTION ================= */
 function renderProd(ds){
-  $('prodT').innerHTML=halls.map(h=>{const p=ds.prod[h.id];if(!p)return`<tr class="click" data-h="${h.id}"><td class="l">H${h.id}</td><td class="l mut" colspan="6">${T('noData')}</td><td></td></tr>`;
+  setH($('prodT'),halls.map(h=>{const p=ds.prod[h.id];if(!p)return`<tr class="click" data-h="${h.id}"><td class="l">H${h.id}</td><td class="l mut" colspan="6">${T('noData')}</td><td></td></tr>`;
     const plan=p.plan!==null&&p.plan!==undefined?p.plan:(has(P.planHall)?P.planHall:null),act=p.actual===null||p.actual===undefined?null:p.actual;const pct=plan>0&&act!==null?act/plan*100:null;
     const pr=p.progress;
     return`<tr class="click" data-h="${h.id}"><td class="l">H${h.id}</td><td class="l">${esc(p.order||'—')}</td><td class="l" style="color:${PH_COL[p.phase]}">${T('ph_'+p.phase)}</td>
       <td>${pr===null||pr===undefined?'—':`<span class="pbar"><i style="width:${(pr*100).toFixed(0)}%;background:${PH_COL[p.phase]}"></i></span> ${Math.round(pr*100)}%`}</td><td>${plan===null?'—':fmtN(plan,plan%1?1:0)}</td><td>${dash(act)}</td>
-      <td class="${pct!==null&&has(P.th_out)&&pct<P.th_out?'bad':''}">${pct===null?'—':fmtN(pct,0)+'%'}</td><td class="l">${srcBadge(p)}</td></tr>`}).join('');
+      <td class="${pct!==null&&has(P.th_out)&&pct<P.th_out?'bad':''}">${pct===null?'—':fmtN(pct,0)+'%'}</td><td class="l">${srcBadge(p)}</td></tr>`}).join(''));
   document.querySelectorAll('#prodT tr.click').forEach(r=>r.onclick=()=>flyHall(halls[+r.dataset.h-1]))}
 
 /* ================= STAFF ================= */
@@ -1360,7 +1528,7 @@ const ROLES=[{k:'fl',c:'var(--amber)'},{k:'log',c:'var(--log)'},{k:'mech',c:'var
 $('staffNow').innerHTML=ROLES.map(r=>`<div class="cell"><span class="nm"><i style="background:${r.c}"></i><span data-t="r_${r.k}"></span></span><span class="ut" id="u-${r.k}"></span><button id="m-${r.k}">−</button><b id="n-${r.k}">0</b><button id="p-${r.k}">+</button></div>`).join('');
 for(const r of ROLES){$('p-'+r.k).onclick=()=>{if(simOn)addOne(r.k);renderStaff()};$('m-'+r.k).onclick=()=>{if(simOn)removeOne(r.k);renderStaff()}}
 function buildStaffPlan(){const sh=P.shifts;$('staffPlanT').innerHTML=`<thead><tr><th class="l"></th>${[1,2,3].map(n=>`<th>${T('shift')} ${n}<br><small class="mut">${sh[n-1]?esc(sh[n-1]):T('notSetS')}</small></th>`).join('')}</tr></thead><tbody>`+
-  ROLES.map(r=>`<tr><td class="l">${T('r_'+r.k)}</td>${[1,2,3].map(n=>`<td><input type="number" min="0" max="${ROLE_MAX[r.k]}" step="1" value="${has(P.staff[n][r.k])?P.staff[n][r.k]:''}" placeholder="—" data-n="${n}" data-r="${r.k}"></td>`).join('')}</tr>`).join('')+'</tbody>';
+  ROLES.map(r=>`<tr><td class="l">${T('r_'+r.k)}</td>${[1,2,3].map(n=>`<td><input type="number" inputmode="numeric" min="0" max="${ROLE_MAX[r.k]}" step="1" aria-label="${esc(T('r_'+r.k)+' · '+T('shift')+' '+n)}" value="${has(P.staff[n][r.k])?P.staff[n][r.k]:''}" placeholder="—" data-n="${n}" data-r="${r.k}"></td>`).join('')}</tr>`).join('')+'</tbody>';
   $('staffPlanT').querySelectorAll('input').forEach(i=>i.onchange=()=>{const raw=i.value.trim();let v=null;
     if(raw!==''){v=Math.round(+raw);if(!isFinite(v)||v<0||v>ROLE_MAX[i.dataset.r]){i.classList.add('inv');$('staffStat').textContent=T('badVal')+' 0…'+ROLE_MAX[i.dataset.r];return}}
     i.classList.remove('inv');$('staffStat').textContent='';P.staff[i.dataset.n][i.dataset.r]=v;saveParams();
@@ -1455,11 +1623,11 @@ function buildEntry(){segSel('entSeg','e',entType);const rec=entEdit?FACT.find(r
   $('entForm').innerHTML=EF[entType].map(([k,ty,opts])=>{const v=d[k]===undefined||d[k]===null?'':(k==='progress'&&d[k]!==''?Math.round(+d[k]*1000)/10:d[k]);
     const id='ef-'+k;let inp;
     if(ty==='s')inp=`<select id="${id}">${opts.map(o=>`<option value="${o}"${String(v)===o?' selected':''}>${esc(optT(k,o))}</option>`).join('')}</select>`;
-    else if(ty==='dt')inp=`<input type="datetime-local" id="${id}" value="${esc(v)}">`;
-    else if(ty==='n')inp=`<input type="number" id="${id}" min="0" step="any" value="${esc(v)}" placeholder="—">`;
-    else inp=`<input type="text" id="${id}" value="${esc(v)}" autocomplete="off">`;
+    else if(ty==='dt')inp=`<div class="dtw"><input type="datetime-local" id="${id}" value="${esc(v)}"><button type="button" class="now" data-now="${id}">${T('ux_now')}</button></div>`;
+    else if(ty==='n')inp=`<input type="number" id="${id}" min="0" step="any" inputmode="decimal" value="${esc(v)}" placeholder="—">`;
+    else inp=`<input type="text" id="${id}" value="${esc(v)}" autocomplete="off" spellcheck="false" enterkeyhint="next"${['id','plate','sku','location','order_id'].includes(k)?' autocapitalize="characters"':''}>`;
     return`<label for="${id}">${T('ef_'+k)}${k==='progress'?' (%)':''}</label>${inp}`}).join('');
-  $('entSave').textContent=rec?T('e_update'):T('e_add');$('entCancel').hidden=!rec;$('entStat').textContent='';renderEntryList()}
+  $('entSave').textContent=rec?T('e_update'):T('e_add');$('entCancel').hidden=!rec;$('entStat').textContent='';renderEntryList();buildQuick()}
 function readEntry(){const d={};for(const [k,ty] of EF[entType]){const el=$('ef-'+k);let v=el.value.trim();if(v==='')continue;
     if(ty==='n'){const n=+v.replace(',','.');if(!isFinite(n)||n<0)return{err:T('badVal')+': '+T('ef_'+k)};v=k==='progress'?Math.min(100,n)/100:n}
     d[k]=v}
@@ -1496,10 +1664,10 @@ const PG=[
  ['g_misc',[['arbAutoS','un_s',10,86400]]]];
 const LAYOUT=[['lay_rack',()=>rack.length+' '+T('un_pal')],['lay_docks',()=>DOCKS_IN.length+' WE + '+DOCKS_OUT.length+' WA'],['lay_halls',()=>halls.length],['lay_spots',()=>MSPOTS.length+' / '+ESPOTS.length],['lay_buf',()=>inBuf.length+' / '+outBuf.length+' / '+prodBuf.length]];
 function buildParams(){
-  $('pGroups').innerHTML=`<details open><summary>${T('g_shift')}</summary><div class="pgrid">`+[0,1,2].map(i=>`<span>${T('p_shiftN')} ${i+1}</span><input type="time" id="ps-${i}" value="${P.shifts[i]||''}"><span class="u">${P.shifts[i]?T('un_clockS'):T('notSetS')}</span>`).join('')+
+  $('pGroups').innerHTML=`<details open><summary>${T('g_shift')}</summary><div class="pgrid">`+[0,1,2].map(i=>`<span>${T('p_shiftN')} ${i+1}</span><input type="time" id="ps-${i}" aria-label="${esc(T('p_shiftN')+' '+(i+1))}" value="${P.shifts[i]||''}"><span class="u">${P.shifts[i]?T('un_clockS'):T('notSetS')}</span>`).join('')+
     `</div><div class="note">${T('shiftNote')}</div></details>`+
     PG.map(([g,items])=>`<details open><summary>${T(g)}</summary><div class="pgrid">`+
-    items.map(([k,u,mn,mx])=>`<span>${T('p_'+k)}${SIM_REQ.includes(k)?`<i class="req" title="${esc(T('reqSim'))}"> *</i>`:''}</span><input type="number" id="pi-${k}" min="${mn}" max="${mx}" step="any" value="${has(P[k])?P[k]:''}" placeholder="${esc(T('notSetS'))}"><span class="u">${T(u)}</span>`).join('')+'</div></details>').join('')+
+    items.map(([k,u,mn,mx])=>`<span>${T('p_'+k)}${SIM_REQ.includes(k)?`<i class="req" title="${esc(T('reqSim'))}"> *</i>`:''}</span><input type="number" id="pi-${k}"${mn<0?'':' inputmode="decimal"'} min="${mn}" max="${mx}" step="any" aria-label="${esc(T('p_'+k))}" value="${has(P[k])?P[k]:''}" placeholder="${esc(T('notSetS'))}"><span class="u">${T(u)}</span>`).join('')+'</div></details>').join('')+
     `<details open><summary>${T('g_layout')}</summary><div class="note">${T('layNote')}</div><div class="kv">${LAYOUT.map(([k,f])=>`<span>${T(k)}</span><b>${f()}</b>`).join('')}</div></details>`;
   for(let i=0;i<3;i++)$('ps-'+i).onchange=e=>{const v=e.target.value.trim();const m=parseHM(v);if(v!==''&&m===null){e.target.classList.add('inv');return}e.target.classList.remove('inv');
     P.shifts[i]=m===null?null:fmtHM(m);P=mergeParams(P);saveParams();buildParams();buildStaffPlan();fillRepSel();renderAll()};
@@ -1609,7 +1777,7 @@ function renderPanel(full){if(scene!=='hub'&&!full)return;const ds=getDS();const
   if(curTab==='ov')renderOverview(ds,K);else if(curTab==='docks'){drawGantt(ds);renderTrucks(ds)}else if(curTab==='orders')renderOrders(ds,K);
   else if(curTab==='prod')renderProd(ds);else if(curTab==='staff')renderStaff();else if(curTab==='data')renderData();else if(curTab==='parts')renderParts();else if(curTab==='report')renderReport()}
 function renderAll(){const ds=getDS();const Ks=compute(ds,...curWin(ds.now));renderTop(ds,Ks);
-  const A=alertsOf(Ks).slice(0,4);const wh=A.map(a=>'<div>⚠ '+esc(a)+'</div>').join('');if($('warn').innerHTML!==wh)$('warn').innerHTML=wh;
+  const A=alertsOf(Ks).filter(a=>!uxDismissed('w:'+a.split(':')[0])).slice(0,4);setH($('warn'),A.map(a=>'<div><span>⚠ '+esc(a)+'</span>'+XB('w:'+a.split(':')[0])+'</div>').join(''));
   if(dmode==='sim'&&simOn)for(const h of halls)drawLabel(h);
   renderPanel(true)}
 
@@ -1737,6 +1905,126 @@ function pickAt(cx,cy){const r=stage.getBoundingClientRect();ndc.set((cx-r.left)
 function openBuilding(id){if(id==='hub'){enterHub();return}$('cardT').textContent=T('b_'+id);$('card').hidden=false;$('cardX').focus()}
 
 
+/* ================= UX v2: responsive shell · dismissible hints · quick entry ================= */
+Object.assign(I18N.ru,{ux_add:'Ввести данные',ux_addData2:'+ Ввести данные',ux_addTip:'Ручной ввод: фуры, заказы, цеха, запас (клавиша E)',ux_menu:'Меню',ux_close:'Закрыть',
+ ux_emptyFact:'Нет данных. Введите их вручную, загрузите файл CSV/JSON или синхронизируйте с Arbeitzeit.',ux_loadFile:'Файл / Arbeitzeit',
+ ux_simMiss:'Модель не запущена: не заданы параметры (%n).',ux_setParams:'Задать параметры',ux_tapMiss:'Нажмите на пункт — откроется нужное поле.',ux_now:'Сейчас',ux_set:'Задать',ux_setThr:'Задать порог',
+ ux_addTruck:'+ Ввести фуру',ux_addOrder:'+ Ввести заказ',ux_addProd:'+ Ввести данные цеха',ux_kpi:'Показатели',ux_hideHints:'Скрыть подсказки',ux_showKpi:'Строка показателей (KPI)',
+ ux_fs:'Сцена на весь экран',ux_fsT:'Сцена на весь экран (F)',ux_panel:'Боковая панель: скрыть / показать (P)',ux_wide:'Широкая панель (дашборд) / обычная',ux_restore:'Вернуть закрытые подсказки',ux_lang:'Язык',
+ ux_panelShow:'◂ Панель',ux_toParams:'Смены и параметры →',ux_toStaff:'План персонала →',ux_startH:'С чего начать',
+ ux_startTxt:'Данных пока нет — всё вводите вы: факты (фуры, заказы, цеха, запас), время смен, параметры завода и план персонала. Либо загрузите файл или данные Arbeitzeit.',
+ ux_manualH:'Ручной ввод',ux_split:'Ширина панели: перетащите или ←/→; двойной щелчок — скрыть',ux_fullForm:'Полная форма',ux_staffHint:'Введите число сотрудников по ролям для каждой смены.',
+ ux_keysNote:'Клавиши: E — ввод · F — весь экран · P — панель · V — вид · Esc — назад',
+ q_h:'Быстро: прибытие / убытие фуры',q_arr:'Прибытие',q_dock:'На рампе',q_dep:'Убытие',q_id:'ID рейса или госномер',q_time:'Время',q_save:'Записать событие',
+ q_added:'Новая фура записана',q_updated:'Фура обновлена',q_note:'Если введённый вами открытый рейс с этим ID уже есть — событие добавляется к нему, иначе создаётся новая запись (источник «ввод»).',
+ keys:'Клавиши: пробел — пауза модели · 1/2/3 — ускорение · V — вид · E — ввод · F — весь экран · P — панель · Esc — к территории'});
+Object.assign(I18N.de,{ux_add:'Daten eingeben',ux_addData2:'+ Daten eingeben',ux_addTip:'Manuelle Eingabe: LKW, Aufträge, Hallen, Bestand (Taste E)',ux_menu:'Menü',ux_close:'Schließen',
+ ux_emptyFact:'Keine Daten. Manuell eingeben, CSV/JSON-Datei laden oder mit Arbeitzeit synchronisieren.',ux_loadFile:'Datei / Arbeitzeit',
+ ux_simMiss:'Modell nicht gestartet: Parameter fehlen (%n).',ux_setParams:'Parameter eingeben',ux_tapMiss:'Eintrag antippen — das passende Feld öffnet sich.',ux_now:'Jetzt',ux_set:'Festlegen',ux_setThr:'Schwelle festlegen',
+ ux_addTruck:'+ LKW eingeben',ux_addOrder:'+ Auftrag eingeben',ux_addProd:'+ Hallendaten eingeben',ux_kpi:'Kennzahlen',ux_hideHints:'Hinweise ausblenden',ux_showKpi:'Kennzahlenleiste (KPI)',
+ ux_fs:'Szene im Vollbild',ux_fsT:'Szene im Vollbild (F)',ux_panel:'Seitenleiste aus / ein (P)',ux_wide:'Breite Seitenleiste (Dashboard) / normal',ux_restore:'Geschlossene Hinweise wiederherstellen',ux_lang:'Sprache',
+ ux_panelShow:'◂ Panel',ux_toParams:'Schichten & Parameter →',ux_toStaff:'Personalplan →',ux_startH:'Erste Schritte',
+ ux_startTxt:'Noch keine Daten — alles geben Sie ein: Ist-Daten (LKW, Aufträge, Hallen, Bestand), Schichtzeiten, Werksparameter und Personalplan. Oder Datei bzw. Arbeitzeit-Daten laden.',
+ ux_manualH:'Manuelle Eingabe',ux_split:'Breite: ziehen oder ←/→; Doppelklick blendet aus',ux_fullForm:'Vollständiges Formular',ux_staffHint:'Anzahl Mitarbeiter je Rolle und Schicht eingeben.',
+ ux_keysNote:'Tasten: E Eingabe · F Vollbild · P Seitenleiste · V Ansicht · Esc zurück',
+ q_h:'Schnell: LKW-Ankunft / -Abfahrt',q_arr:'Ankunft',q_dock:'An Rampe',q_dep:'Abfahrt',q_id:'Fahrt-ID oder Kennzeichen',q_time:'Zeit',q_save:'Ereignis speichern',
+ q_added:'Neuer LKW erfasst',q_updated:'LKW aktualisiert',q_note:'Gibt es bereits eine von Ihnen eingegebene offene Fahrt mit dieser ID, wird das Ereignis ergänzt, sonst ein neuer Datensatz (Quelle „Eingabe“) angelegt.',
+ keys:'Tasten: Leertaste Modell-Pause · 1/2/3 Zeitraffer · V Ansicht · E Eingabe · F Vollbild · P Seitenleiste · Esc Gelände'});
+
+/* UI preferences (own key, lhub.r4.* namespace; cleared by «Очистить всё») */
+var UXK='lhub.r4.ui',UXS={hints:true,hud:true,panelW:null,pcol:false},uxGone=new Set();
+try{const s=JSON.parse(localStorage.getItem(UXK)||'null');if(s&&typeof s==='object')UXS=Object.assign(UXS,s)}catch(e){}
+try{JSON.parse(sessionStorage.getItem('lhub.r4.ui.dismissed')||'[]').forEach(k=>uxGone.add(k))}catch(e){}
+function uxSave(){try{localStorage.setItem(UXK,JSON.stringify(UXS))}catch(e){}}
+function uxDismissed(k){return !!(uxGone&&uxGone.has(k))}
+function uxDismiss(k){uxGone.add(k);try{sessionStorage.setItem('lhub.r4.ui.dismissed',JSON.stringify([...uxGone]))}catch(e){}uxApply();renderAll()}
+function XB(k){return`<button class="xbtn" data-x="${esc(k)}" aria-label="${esc(T('ux_close'))}" title="${esc(T('ux_close'))}">×</button>`}
+function uxApply(){const b=document.body;b.classList.toggle('nohints',!UXS.hints);b.classList.toggle('pcol',!!UXS.pcol);
+  $('campusHint').hidden=uxGone.has('campusHint');
+  $('hudWrap').classList.toggle('c',!UXS.hud);$('hudBtn').textContent=UXS.hud?'▴':'▾ '+T('ux_kpi');$('hudBtn').setAttribute('aria-expanded',UXS.hud);$('hudBtn').title=T('ux_showKpi');
+  if(UXS.panelW)$('panel').style.setProperty('--pw',clampPW(UXS.panelW)+'px');else $('panel').style.removeProperty('--pw');
+  $('hintsCk').checked=!UXS.hints;$('hudCk').checked=!!UXS.hud;$('bannerX').setAttribute('aria-label',T('ux_close'));$('menuBtn').setAttribute('aria-label',T('ux_menu'));
+  document.querySelectorAll('.xbtn').forEach(x=>{x.setAttribute('aria-label',T('ux_close'));x.title=T('ux_close')})}
+function uxLang(){uxApply();segSel('langM','l',lang);syncInstall();$('fsBtn').setAttribute('aria-label',T('ux_fs'))}
+const nowLocal=()=>{const d=new Date();return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+'T'+pad2(d.getHours())+':'+pad2(d.getMinutes())};
+const desk=()=>innerWidth>900&&!(innerHeight<=520&&innerWidth>innerHeight);
+
+/* navigation helpers: header button, empty states, missing-parameter list */
+function ensureHub(fn){if(scene!=='hub'){enterHub();setTimeout(fn,330)}else fn()}
+function showPanelTab(t,after){ensureHub(()=>{if(UXS.pcol){UXS.pcol=false;uxSave();uxApply()}if(document.body.classList.contains('fs'))setFs(false);toggleMenu(false);showTab(t);if(after)setTimeout(after,40)})}
+function openEntry(type){if(type&&type!=='cur'&&EF[type]){entType=type;entEdit=null}
+  showPanelTab('entry',()=>{const tc=$('tab-entry');tc.scrollTop=0;if(entType!=='truck'){const h=$('entFormH');tc.scrollTop=Math.max(0,h.offsetTop-tc.offsetTop-8)}})}
+function jumpTo(sel){const el0=document.querySelector(sel);if(!el0)return;const tc=el0.closest('.tabc');if(!tc)return;
+  showPanelTab(tc.id.slice(4),()=>{const el=document.querySelector(sel);if(!el)return;const d=el.closest('details');if(d)d.open=true;
+    const r=el.getBoundingClientRect(),cr=tc.getBoundingClientRect();tc.scrollTop+=r.top-cr.top-cr.height/3;
+    try{el.focus({preventScroll:true})}catch(e){el.focus()}el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1900)})}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-x],[data-entry],[data-jump],[data-go],[data-now],[data-start],[data-gate]');if(!t)return;
+  const d=t.dataset;
+  if(d.x!==undefined){e.preventDefault();uxDismiss(d.x);return}
+  if(d.entry){openEntry(d.entry);return}
+  if(d.jump){jumpTo(d.jump);return}
+  if(d.now){const el=$(d.now);if(el){el.value=nowLocal();el.dispatchEvent(new Event('change',{bubbles:true}))}return}
+  if(d.start){doStart();return}
+  if(d.gate){showPanelTab('ov',()=>{$('tab-ov').scrollTop=0});return}
+  if(d.go)showPanelTab(d.go)});
+document.addEventListener('keydown',e=>{const t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.classList&&t.classList.contains('kpi')&&t.dataset.jump){e.preventDefault();jumpTo(t.dataset.jump)}});
+
+/* fullscreen stage (CSS-based: works on iPhone, where element fullscreen is unavailable) */
+function setFs(on){document.body.classList.toggle('fs',on);$('fsBtn').textContent=on?'✕':'⤢';$('fsBtn').setAttribute('aria-pressed',on);setTimeout(resize,30)}
+$('fsBtn').onclick=()=>setFs(!document.body.classList.contains('fs'));
+function togglePanel(){if(!desk()){$('sheetBtn').click();return}UXS.pcol=!UXS.pcol;uxSave();uxApply();setTimeout(resize,30)}
+$('panelShow').onclick=togglePanel;
+function uxEsc(){if(!$('menu').hidden){toggleMenu(false);return true}if(document.body.classList.contains('fs')){setFs(false);return true}return false}
+
+/* KPI strip collapse */
+$('hudBtn').onclick=()=>{UXS.hud=!UXS.hud;uxSave();uxApply();setTimeout(resize,30)};
+
+/* resizable / collapsible side panel (desktop) */
+function clampPW(w){return Math.round(Math.min(Math.max(360,innerWidth-380),Math.max(340,w)))}
+function setPW(w,save){UXS.panelW=clampPW(w);$('panel').style.setProperty('--pw',UXS.panelW+'px');if(save!==false)uxSave()}
+{const sp=$('split');let d=null;
+  sp.addEventListener('pointerdown',e=>{d={x:e.clientX,w:$('panel').getBoundingClientRect().width};sp.setPointerCapture(e.pointerId);sp.classList.add('drag');e.preventDefault()});
+  sp.addEventListener('pointermove',e=>{if(d)setPW(d.w+(d.x-e.clientX),false)});
+  const up=()=>{if(!d)return;d=null;sp.classList.remove('drag');uxSave()};sp.addEventListener('pointerup',up);sp.addEventListener('pointercancel',up);
+  sp.addEventListener('dblclick',togglePanel);
+  sp.addEventListener('keydown',e=>{const w=$('panel').getBoundingClientRect().width;if(e.key==='ArrowLeft'){e.preventDefault();setPW(w+32)}else if(e.key==='ArrowRight'){e.preventDefault();setPW(w-32)}else if(e.key==='Enter'){e.preventDefault();togglePanel()}})}
+addEventListener('resize',()=>{if(UXS.panelW)$('panel').style.setProperty('--pw',clampPW(UXS.panelW)+'px')});
+
+/* menu */
+function toggleMenu(on){const m=$('menu');on=on===undefined?m.hidden:on;m.hidden=!on;$('menuBtn').setAttribute('aria-expanded',on);if(on){$('clockM').innerHTML=$('clock').innerHTML;syncInstall();
+  $('panelM').hidden=$('wideM').hidden=!desk()}}
+$('menuBtn').onclick=e=>{e.stopPropagation();toggleMenu()};
+document.addEventListener('pointerdown',e=>{if(!$('menu').hidden&&!e.target.closest('#menu,#menuBtn'))toggleMenu(false)});
+document.querySelectorAll('#langM button').forEach(b=>b.onclick=()=>{lang=b.dataset.l;applyLang()});
+$('hintsCk').onchange=e=>{UXS.hints=!e.target.checked;uxSave();uxApply()};
+$('hudCk').onchange=e=>{UXS.hud=e.target.checked;uxSave();uxApply();setTimeout(resize,30)};
+$('fsM').onclick=()=>{toggleMenu(false);setFs(true)};
+$('panelM').onclick=()=>{toggleMenu(false);togglePanel()};
+$('wideM').onclick=()=>{toggleMenu(false);if(UXS.pcol){UXS.pcol=false}if(UXS.panelW&&UXS.panelW>=innerWidth*0.45){UXS.panelW=null;uxSave();uxApply()}else setPW(innerWidth*0.5);uxApply();setTimeout(resize,30)};
+$('restoreM').onclick=()=>{uxGone.clear();try{sessionStorage.removeItem('lhub.r4.ui.dismissed')}catch(e){}UXS.hints=true;uxSave();uxApply();toggleMenu(false);renderAll()};
+function syncInstall(){const ib=$('installBtn'),im=$('installM');im.hidden=ib.hidden;im.textContent=ib.textContent||T('ux_install')}
+$('installM').onclick=()=>{toggleMenu(false);$('installBtn').click()};
+new MutationObserver(syncInstall).observe($('installBtn'),{attributes:true,childList:true,characterData:true,subtree:true});
+
+/* quick truck event: arrival / at dock / departure with «now» */
+let qDir='in',qEv='actual_arrival';
+document.querySelectorAll('#qDir button').forEach(b=>b.onclick=()=>{qDir=b.dataset.v;buildQuick()});
+document.querySelectorAll('#qEv button').forEach(b=>b.onclick=()=>{qEv=b.dataset.v;buildQuick()});
+function buildQuick(){$('qTruck').hidden=entType!=='truck';segSel('qDir','v',qDir);segSel('qEv','v',qEv);if(!$('qTime').value)$('qTime').value=nowLocal();
+  const ids=[...new Set(FACT.filter(r=>r.src==='input'&&r.type==='truck'&&!r.data.departed_at&&(r.data.direction||'in')===qDir).map(r=>r.data.id||r.data.plate).filter(Boolean))];
+  setH($('qIds'),ids.map(i=>`<option value="${esc(i)}"></option>`).join(''))}
+$('qSave').onclick=()=>{const st=$('qStat'),id=$('qId').value.trim();
+  if(!id){st.innerHTML='<span class="err">'+esc(T('e_needId'))+'</span>';$('qId').focus();return}
+  const tm=$('qTime').value.trim()||nowLocal(),dock=$('qDock').value,pr=$('qPal').value.trim();let pal=null;
+  if(pr!==''){pal=+pr.replace(',','.');if(!isFinite(pal)||pal<0){st.innerHTML='<span class="err">'+esc(T('badVal')+': '+T('ef_pallets'))+'</span>';return}}
+  const open=FACT.filter(r=>r.src==='input'&&r.type==='truck'&&(r.data.id===id||r.data.plate===id)&&(r.data.direction||'in')===qDir&&!r.data.departed_at);
+  const use=open.length&&!open[open.length-1].data[qEv]?open[open.length-1]:null;   // only the user's own «ввод» records are ever amended
+  const d=use?Object.assign({},use.data):{id,direction:qDir};d[qEv]=tm;if(dock)d.dock=dock;if(pal!==null)d.pallets=pal;
+  putInput('truck',d,use?use.uid:null);
+  st.innerHTML='<span class="okc">'+esc(T(use?'q_updated':'q_added')+': '+id+' · '+T(qEv==='actual_arrival'?'q_arr':qEv==='docked_at'?'q_dock':'q_dep')+' '+tm.replace('T',' '))+'</span>';
+  $('qId').value='';$('qPal').value='';$('qDock').value='';$('qTime').value=nowLocal();renderEntryList();buildQuick();afterFactLoad()};
+uxApply();
+
 /* ================= SCENE SWITCH ================= */
 function fadeTo(fn){const f=$('fade');f.classList.add('on');setTimeout(()=>{fn();requestAnimationFrame(()=>f.classList.remove('on'))},260)}
 function enterHub(){$('card').hidden=true;setHover(null);fadeTo(()=>{scene='hub';document.body.dataset.scene='hub';setView(0);camH.d=goalH.d*1.6;camH.ph=1.15;resize();applyLang()})}
@@ -1769,11 +2057,14 @@ new ResizeObserver(resize).observe(stage);resize();camH.d=goalH.d;camC.d=goalC.d
 
 /* ================= KEYBOARD ================= */
 document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const tg=e.target;const typing=tg&&(tg.tagName==='INPUT'||tg.tagName==='SELECT'||tg.tagName==='TEXTAREA');
-  if(e.code==='Escape'){if(!$('card').hidden){$('card').hidden=true;return}if(scene==='hub'){leaveHub();return}}
+  if(e.code==='Escape'){if(uxEsc())return;if(!$('card').hidden){$('card').hidden=true;return}if(scene==='hub'){leaveHub();return}}
   if(typing)return;
   if(e.code==='Space'&&dmode==='sim'&&simOn){e.preventDefault();if(tg&&tg.blur&&tg!==document.body)tg.blur();setPause(!paused);return}
   if(dmode==='sim'){if(e.key==='1')setSpeed(1);else if(e.key==='2')setSpeed(3);else if(e.key==='3')setSpeed(8)}
-  if((e.key==='v'||e.key==='V'||e.code==='KeyV')&&scene==='hub')setView((vi+1)%VIEWS.length)});
+  if((e.key==='v'||e.key==='V'||e.code==='KeyV')&&scene==='hub')setView((vi+1)%VIEWS.length);
+  else if(e.code==='KeyF')setFs(!document.body.classList.contains('fs'));
+  else if(e.code==='KeyP'&&scene==='hub')togglePanel();
+  else if(e.code==='KeyE'){e.preventDefault();openEntry('cur')}});
 
 /* ================= LANGUAGE ================= */
 function applyLang(){document.documentElement.lang=lang;try{localStorage.setItem('lhub.lang',lang)}catch(e){}
@@ -1786,7 +2077,7 @@ function applyLang(){document.documentElement.lang=lang;try{localStorage.setItem
   OFF.forEach(o=>$('bb-'+o.id).textContent=T('b_'+o.id)+(o.id==='hub'?' ▸':' · '+T('b_soonS')));
   for(const f of floorLabels)drawFloor(f);
   segSel('lang','l',lang);$('help').innerHTML=HELP[lang];
-  camLabel();buildParams();buildStaffPlan();buildEntry();renderAzAvail();fillRepSel();renderLegend();setPause(paused);showHalls();placeBLabel()}
+  camLabel();buildParams();buildStaffPlan();buildEntry();renderAzAvail();fillRepSel();renderLegend();setPause(paused);showHalls();placeBLabel();uxLang()}
 document.querySelectorAll('#lang button').forEach(b=>b.onclick=()=>{lang=b.dataset.l;applyLang()});
 
 /* ================= MAIN LOOP ================= */
@@ -1800,7 +2091,7 @@ function frame(now){const dt=Math.min(0.05,Math.max(0,(now-last)/1000));last=now
 const fontsReady=document.fonts&&document.fonts.load?Promise.all([document.fonts.load('600 84px "Saira Condensed"','HALLE'),document.fonts.load('600 84px "Roboto Condensed"','ПРИЁМКА'),document.fonts.load('500 30px "IBM Plex Mono"','0')]).catch(()=>{}):Promise.resolve();
 fontsReady.then(()=>{applyLang();const s=clickables[1].userData.sign;if(s){const g=s.c.getContext('2d');g.fillStyle='#1e2732';g.fillRect(12,0,500,96);g.font='600 64px '+DISP;g.fillStyle='#f4f5f1';g.textBaseline='middle';g.fillText('LOGISTIK-HUB',30,52);s.s.material.map.needsUpdate=true}});
 segSel('perSeg','p',period);segSel('dirSeg','d',truckDir);segSel('factFilt','f',factFilter);setSpeed(1);
-applyLang();setMode(dmode);requestAnimationFrame(frame);
+document.body.dataset.tab=curTab;applyLang();setMode(dmode);requestAnimationFrame(frame);
 window.__hub={get scene(){return scene},get dmode(){return dmode},setMode,enterHub,leaveHub,setSpeed,setPause,clearSim,startSim:doStart,simMissing,get simOn(){return simOn},showTab,setLang:l=>{lang=l;applyLang()},
   kpi:()=>{const ds=getDS();return compute(ds,...curWin(ds.now))},params:()=>JSON.parse(JSON.stringify(P)),advance:s=>{let n=Math.ceil(s/0.04);while(n-->0)step(0.04);return clock},parts:()=>partsList().length,fact:()=>FACT.map(r=>({type:r.type,src:r.src,label:r.label,at:r.at.toISOString()})),
   ds:()=>{const d=getDS();return{trucks:d.trucks.length,orders:d.orders.length,stockRack:d.stockRack,prod:Object.keys(d.prod).length}},reportCSV,get clock(){return clock},
