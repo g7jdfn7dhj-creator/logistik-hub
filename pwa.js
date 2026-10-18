@@ -24,11 +24,16 @@ new MutationObserver(()=>{if(!btn.hidden)btn.textContent=t('inst')}).observe(doc
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
   let wantReload=false;                               // reload only after the user accepted an update (not on the first install's clients.claim())
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!wantReload)return;wantReload=false;location.reload()});
-  const offer=w=>show(t('upd'),t('updB'),()=>{wantReload=true;w.postMessage('SKIP_WAITING')});
-  window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js',{scope:'./'}).then(reg=>{
+  const offer=w=>show(t('upd'),t('updB'),()=>{const go=()=>{wantReload=true;w.postMessage('SKIP_WAITING')};   // updates replace only the app shell cache; localStorage/IndexedDB stay untouched
+    (window.LHStore?LHStore.flush():Promise.resolve()).then(go,go)});
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(reg=>{
     if(reg.waiting&&navigator.serviceWorker.controller)offer(reg.waiting);
     reg.addEventListener('updatefound',()=>{const w=reg.installing;if(!w)return;w.addEventListener('statechange',()=>{if(w.state==='installed'&&navigator.serviceWorker.controller)offer(w)})});
-    setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
+    let lastChk=Date.now();const check=()=>{if(navigator.onLine===false)return;lastChk=Date.now();reg.update().catch(()=>{})};
+    if(navigator.serviceWorker.controller)check();                                   // on launch (installed app / reopened tab)
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-lastChk>30000)check()});   // when the app becomes visible again
+    addEventListener('online',check);
+    setInterval(check,60*60*1000);
   }).catch(err=>console.warn('SW registration failed',err))});
 }
 })();

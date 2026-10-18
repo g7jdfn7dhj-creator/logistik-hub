@@ -1,6 +1,6 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Logistik-Hub</title>
-<meta name="app-version" content="lhub-pwa-v3">
+<meta name="app-version" content="lhub-pwa-v4">
 <link rel="stylesheet" href="./fonts/fonts.css">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#161d26">
@@ -288,6 +288,9 @@ td.wrap{white-space:normal}
   #bannerRow{display:none!important}.lg{display:none}.sh{display:inline}
 }
 .keys{right:70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbar{position:fixed;z-index:65;left:50%;top:calc(env(safe-area-inset-top,0px) + 56px);transform:translateX(-50%);width:min(620px,calc(100vw - 20px));display:flex;gap:8px;align-items:center;background:rgba(30,39,50,.98);border:1px solid var(--line);border-left:3px solid var(--warn);padding:8px 10px;font-size:13px;line-height:1.4;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.sbar.ok{border-left-color:var(--ok)}.sbar>span{flex:1}
+@media print{#sbar,#storeBar{display:none!important}}
 @media print{#hudBtn,#stageTools,#split,#menu,#addBtn,#menuBtn,.xbtn{display:none!important}}
 </style></head><body data-scene="campus" data-dm="fact">
 <header class="pad">
@@ -308,8 +311,10 @@ td.wrap{white-space:normal}
   <button id="panelM" class="mb" data-t="ux_panel"></button>
   <button id="wideM" class="mb" data-t="ux_wide"></button>
   <button id="restoreM" class="mb" data-t="ux_restore"></button>
+  <div class="note" id="storeM"></div>
   <div class="note" data-t="ux_keysNote"></div>
 </div>
+<div id="storeBar" class="sbar" hidden role="alert"><span id="storeBarTxt"></span><button data-go="data" data-t="st_toBackup"></button><button class="xbtn" id="storeBarX" aria-label="×">×</button></div>
 <div class="banner pad" id="bannerRow"><div id="banner"></div><button class="xbtn" id="bannerX" data-x="banner" aria-label="×">×</button></div>
 <div id="hudWrap" class="hubonly"><div class="hud" id="hud"></div><button id="hudBtn" aria-expanded="true" aria-controls="hud">▴</button></div>
 <div id="main">
@@ -363,6 +368,7 @@ td.wrap{white-space:normal}
   </div>
   <div class="tabc" id="tab-data" role="tabpanel" hidden>
     <div class="sec"><h3 data-t="dataH"></h3><div class="note" data-t="dataNote"></div></div>
+    <div class="qcard" id="storeSec"><h3 data-t="st_h"></h3><div class="note" id="storeTxt" style="color:var(--fg)"></div><div class="note" id="storeTxt2"></div><div class="note" data-t="st_note"></div><div class="rowb" style="margin-top:6px"><button id="persistBtn" data-t="st_persist" hidden></button></div></div>
     <div class="qcard"><h3 data-t="ux_manualH"></h3><div class="rowb"><button class="pri big" data-entry="truck" data-t="ux_addData2"></button><button data-go="params" data-t="ux_toParams"></button><button data-go="staff" data-t="ux_toStaff"></button></div></div>
     <div class="sec"><h3 data-t="az_h"></h3>
       <div class="rowb"><button id="azSync" class="pri" data-t="az_sync" data-tip="tip_azSync"></button><button id="azCsvBtn" data-t="az_csv" data-tip="tip_azCsv"></button><input type="file" id="azCsv" accept=".csv,text/csv,text/plain" hidden></div>
@@ -417,7 +423,8 @@ td.wrap{white-space:normal}
 </aside>
 </div>
 <script src="./vendor/three.min.js"></script>
-<script>
+<script src="./store.js"></script>
+<script>window.__lhubMain=function(){
 (function(){
 'use strict';
 const I18N={
@@ -965,8 +972,8 @@ function mergeParams(src){const p=emptyParams();if(!src||typeof src!=='object')r
   if(src.staff)for(const n of[1,2,3])for(const r of ROLE_KEYS){const raw=src.staff[n]&&src.staff[n][r];if(raw===null||raw===undefined||raw==='')continue;
     const v=+raw;if(isFinite(v)&&v>=0)p.staff[n][r]=Math.min(ROLE_MAX[r],Math.round(v))}
   return p}
-let P=mergeParams(LS?(()=>{try{return JSON.parse(LS.getItem(PKEY)||'null')}catch(e){return null}})():null);
-function saveParams(){if(LS)try{LS.setItem(PKEY,JSON.stringify(P))}catch(e){}}
+let P=mergeParams((()=>{try{return JSON.parse(LHStore.get(PKEY)||'null')}catch(e){return null}})());
+function saveParams(){LHStore.set(PKEY,JSON.stringify(P))}   // localStorage + IndexedDB copy, on this device only
 // 1 sim-s = 30 s plant time (model time scale)
 function applyParams(){const f=v=>v==null?null:v*2;NEED=P.kits;WPP=f(P.mechMinKit);EW=f(P.elecMin);TEST_S=f(P.testMin);DONE_S=f(P.handMin)}
 applyParams();
@@ -1191,13 +1198,12 @@ function putInput(type,data,uid){const at=new Date();let r=uid?FACT.find(x=>x.ui
   lastLoad=at;factDirty=true;saveData();return r}
 function delFact(uid){const i=FACT.findIndex(x=>x.uid===uid);if(i>=0){FACT.splice(i,1);factDirty=true;saveData()}}
 function clearSrc(src){for(let i=FACT.length-1;i>=0;i--)if(FACT[i].src===src)FACT.splice(i,1);factDirty=true;saveData()}
-function saveData(){if(!LS)return;try{LS.setItem(DKEY,JSON.stringify({v:4,batchNo,uidNo,recs:FACT.map(r=>({type:r.type,data:r.data,src:r.src,label:r.label,at:+r.at,batch:r.batch,uid:r.uid}))}))}
-  catch(e){console.warn('localStorage full',e)}}
+function saveData(){LHStore.set(DKEY,JSON.stringify({v:4,batchNo,uidNo,recs:FACT.map(r=>({type:r.type,data:r.data,src:r.src,label:r.label,at:+r.at,batch:r.batch,uid:r.uid}))}))}   // quota problems are reported in the UI (storage status)
 function loadDataObj(o){FACT.length=0;if(!o||!Array.isArray(o.recs))return;batchNo=+o.batchNo||0;uidNo=+o.uidNo||0;
   for(const r of o.recs){if(!r||!r.type||!r.data)continue;const x={type:r.type,data:r.data,src:r.src,label:r.label,at:new Date(+r.at||Date.now()),batch:+r.batch||++batchNo,uid:+r.uid||++uidNo};
     batchNo=Math.max(batchNo,x.batch);uidNo=Math.max(uidNo,x.uid);FACT.push(x)}
   lastLoad=FACT.length?new Date(Math.max(...FACT.map(r=>+r.at))):null;factDirty=true}
-if(LS){try{loadDataObj(JSON.parse(LS.getItem(DKEY)||'null'))}catch(e){}}
+try{loadDataObj(JSON.parse(LHStore.get(DKEY)||'null'))}catch(e){}
 let factDirty=true,factCache=null;
 
 /* ---- field access with aliases (en/de/ru, case-insensitive) ---- */
@@ -1379,7 +1385,7 @@ const TABS=['ov','docks','orders','prod','staff','data','entry','parts','params'
 const TAB_IC={ov:'◫',docks:'⇆',orders:'▤',prod:'▣',staff:'☺\uFE0E',data:'⇩',entry:'✚',parts:'⌕',params:'⚙\uFE0E',report:'⎙'};
 $('tabs').innerHTML=TABS.map(t=>`<button role="tab" data-tab="${t}" aria-selected="${t==='ov'}"><span class="ti" aria-hidden="true">${TAB_IC[t]}</span><span data-t="tab_${t}"></span></button>`).join('');
 function showTab(t){curTab=t;document.body.dataset.tab=t;document.querySelectorAll('#tabs button').forEach(b=>{const on=b.dataset.tab===t;b.setAttribute('aria-selected',on);$('tab-'+b.dataset.tab).hidden=!on});
-  $('panel').classList.remove('collapsed');$('sheetBtn').textContent='▾';if(t==='entry')buildEntry();if(t==='data')renderAzAvail();renderPanel(true);
+  $('panel').classList.remove('collapsed');$('sheetBtn').textContent='▾';if(t==='entry')buildEntry();if(t==='data'){renderAzAvail();LHStore.estimate()}renderPanel(true);
   const tb=$('tabs'),ab=tb.querySelector('[data-tab="'+t+'"]');if(ab&&tb.scrollWidth>tb.clientWidth){const l=ab.offsetLeft-tb.offsetLeft,r=l+ab.offsetWidth;if(l<tb.scrollLeft)tb.scrollLeft=l-8;else if(r>tb.scrollLeft+tb.clientWidth)tb.scrollLeft=r-tb.clientWidth+8}}
 const setH=(el,h)=>{if(el.innerHTML!==h)el.innerHTML=h};   // write only on change: keeps taps/focus alive between 0.5 s refreshes
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
@@ -1575,7 +1581,7 @@ $('azCsv').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)
   catch(err){$('azStat').innerHTML='<span class="err">'+esc(f.name)+': '+T('fa_err')+' — '+esc(err.message)+'</span>'}};
 async function azGet(){const url=$('azUrl').value.trim();const st=$('azUrlStat');
   if(!/^https?:\/\//i.test(url)){st.innerHTML='<span class="err">'+T('fa_badurl')+'</span>';return}
-  try{localStorage.setItem('lhub.r4.azUrl',url)}catch(e){}
+  LHStore.set('lhub.r4.azUrl',url);
   st.textContent=T('fa_loading');
   try{const res=await fetch(url,{method:'GET',cache:'no-store',redirect:'follow',credentials:'omit',headers:{'Accept':'application/json, text/csv, text/plain;q=0.8'}}); // read-only: GET, no body
     if(!res.ok)throw new Error('HTTP '+res.status);
@@ -1604,11 +1610,11 @@ $('bkImp').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)
   try{const j=JSON.parse(await f.text());if(!j||typeof j!=='object'||(!j.params&&!j.data))throw new Error(T('bk_bad'));
     if(j.params){P=mergeParams(j.params);saveParams();applyParams()}
     if(j.data){loadDataObj(j.data);saveData()}
-    if(j.settings&&j.settings.azUrl){$('azUrl').value=j.settings.azUrl;try{localStorage.setItem('lhub.r4.azUrl',j.settings.azUrl)}catch(e2){}}
+    if(j.settings&&j.settings.azUrl){$('azUrl').value=j.settings.azUrl;LHStore.set('lhub.r4.azUrl',j.settings.azUrl);}
     buildParams();buildStaffPlan();afterFactLoad();$('bkStat').innerHTML='<span class="okc">'+T('bk_ok')+': '+esc(f.name)+' · '+FACT.length+'</span>'}
   catch(err){$('bkStat').innerHTML='<span class="err">'+T('bk_err')+': '+esc(err.message)+'</span>'}};
 $('clrAll').onclick=()=>{if(!confirm(T('clr_confirm')))return;
-  try{const ks=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('lhub.r4.')===0)ks.push(k)}ks.forEach(k=>localStorage.removeItem(k))}catch(e){}   // only own keys — never Arbeitzeit's
+  LHStore.clearAll();   // only own keys — never Arbeitzeit's
   FACT.length=0;lastLoad=null;batchNo=0;uidNo=0;factDirty=true;histF.length=0;P=emptyParams();applyParams();clearSim();simStartMs=null;$('azUrl').value='';$('azAuto').checked=false;setAzAuto();
   entEdit=null;buildParams();buildStaffPlan();buildEntry();afterFactLoad();showHalls();$('bkStat').innerHTML='<span class="okc">'+T('clr_done')+'</span>'};
 
@@ -1762,7 +1768,7 @@ function showHalls(){const ds=dmode==='fact'?factDS():null;
 function sampleFact(){const s=curSample();histF.push(s);if(histF.length>720)histF.shift()}
 
 /* ================= MODE ================= */
-function setMode(m){dmode=m;document.body.dataset.dm=m;try{localStorage.setItem('lhub.r4.mode',m)}catch(e){}
+function setMode(m){dmode=m;document.body.dataset.dm=m;LHStore.set('lhub.r4.mode',m);
   simG.visible=m==='sim';factG.visible=m==='fact';segSel('modeSeg','m',m);
   if(m==='fact'){factDirty=true;buildFact3D(true)}showHalls();renderLegend();fillRepSel();renderAll()}
 document.querySelectorAll('#modeSeg button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
@@ -1919,6 +1925,18 @@ Object.assign(I18N.ru,{ux_add:'Ввести данные',ux_addData2:'+ Вве�
  q_h:'Быстро: прибытие / убытие фуры',q_arr:'Прибытие',q_dock:'На рампе',q_dep:'Убытие',q_id:'ID рейса или госномер',q_time:'Время',q_save:'Записать событие',
  q_added:'Новая фура записана',q_updated:'Фура обновлена',q_note:'Если введённый вами открытый рейс с этим ID уже есть — событие добавляется к нему, иначе создаётся новая запись (источник «ввод»).',
  keys:'Клавиши: пробел — пауза модели · 1/2/3 — ускорение · V — вид · E — ввод · F — весь экран · P — панель · Esc — к территории'});
+Object.assign(I18N.ru,{st_h:'Хранение данных',st_line:'Данные хранятся только на этом устройстве · защищены от автоочистки: %s',st_yes:'да',st_no:'нет',st_unk:'неизвестно',
+ st_use:'Занято: %u из доступных %q (оценка браузера)',st_mirror:'Вторая копия на устройстве (IndexedDB) обновлена: %t',st_noIdb:'Вторая копия недоступна (IndexedDB отключён в этом браузере)',
+ st_restored:'Данные восстановлены из второй копии на устройстве (IndexedDB): %n ключ(ей).',st_persist:'Защитить от автоочистки',st_toBackup:'К резервной копии',
+ st_note:'Ничего не отправляется на сервер. Между устройствами данные не синхронизируются — для переноса используйте резервную копию JSON ниже.',
+ st_quotaLS:'Память браузера (localStorage) заполнена. Изменения сохранены во второй копии на этом устройстве (IndexedDB). Сохраните резервную копию JSON и удалите ненужные записи (например, старые импорты).',
+ st_quotaAll:'Не удалось сохранить данные: память устройства заполнена. Сразу сохраните резервную копию JSON (вкладка «Данные») и удалите ненужные записи.'});
+Object.assign(I18N.de,{st_h:'Datenspeicherung',st_line:'Daten werden nur auf diesem Gerät gespeichert · vor automatischer Löschung geschützt: %s',st_yes:'ja',st_no:'nein',st_unk:'unbekannt',
+ st_use:'Belegt: %u von verfügbaren %q (Schätzung des Browsers)',st_mirror:'Zweite Kopie auf dem Gerät (IndexedDB) aktualisiert: %t',st_noIdb:'Zweite Kopie nicht verfügbar (IndexedDB in diesem Browser deaktiviert)',
+ st_restored:'Daten aus der zweiten Kopie auf dem Gerät (IndexedDB) wiederhergestellt: %n Schlüssel.',st_persist:'Vor automatischer Löschung schützen',st_toBackup:'Zur Sicherung',
+ st_note:'Nichts wird an einen Server gesendet. Keine Synchronisierung zwischen Geräten — zum Übertragen die JSON-Sicherung unten verwenden.',
+ st_quotaLS:'Browserspeicher (localStorage) voll. Änderungen wurden in der zweiten Kopie auf diesem Gerät (IndexedDB) gespeichert. JSON-Sicherung erstellen und unnötige Datensätze löschen.',
+ st_quotaAll:'Speichern fehlgeschlagen: Gerätespeicher voll. Sofort JSON-Sicherung erstellen (Reiter „Daten“) und unnötige Datensätze löschen.'});
 Object.assign(I18N.de,{ux_add:'Daten eingeben',ux_addData2:'+ Daten eingeben',ux_addTip:'Manuelle Eingabe: LKW, Aufträge, Hallen, Bestand (Taste E)',ux_menu:'Menü',ux_close:'Schließen',
  ux_emptyFact:'Keine Daten. Manuell eingeben, CSV/JSON-Datei laden oder mit Arbeitzeit synchronisieren.',ux_loadFile:'Datei / Arbeitzeit',
  ux_simMiss:'Modell nicht gestartet: Parameter fehlen (%n).',ux_setParams:'Parameter eingeben',ux_tapMiss:'Eintrag antippen — das passende Feld öffnet sich.',ux_now:'Jetzt',ux_set:'Festlegen',ux_setThr:'Schwelle festlegen',
@@ -1936,7 +1954,7 @@ Object.assign(I18N.de,{ux_add:'Daten eingeben',ux_addData2:'+ Daten eingeben',ux
 var UXK='lhub.r4.ui',UXS={hints:true,hud:true,panelW:null,pcol:false},uxGone=new Set();
 try{const s=JSON.parse(localStorage.getItem(UXK)||'null');if(s&&typeof s==='object')UXS=Object.assign(UXS,s)}catch(e){}
 try{JSON.parse(sessionStorage.getItem('lhub.r4.ui.dismissed')||'[]').forEach(k=>uxGone.add(k))}catch(e){}
-function uxSave(){try{localStorage.setItem(UXK,JSON.stringify(UXS))}catch(e){}}
+function uxSave(){LHStore.set(UXK,JSON.stringify(UXS))}
 function uxDismissed(k){return !!(uxGone&&uxGone.has(k))}
 function uxDismiss(k){uxGone.add(k);try{sessionStorage.setItem('lhub.r4.ui.dismissed',JSON.stringify([...uxGone]))}catch(e){}uxApply();renderAll()}
 function XB(k){return`<button class="xbtn" data-x="${esc(k)}" aria-label="${esc(T('ux_close'))}" title="${esc(T('ux_close'))}">×</button>`}
@@ -1946,7 +1964,7 @@ function uxApply(){const b=document.body;b.classList.toggle('nohints',!UXS.hints
   if(UXS.panelW)$('panel').style.setProperty('--pw',clampPW(UXS.panelW)+'px');else $('panel').style.removeProperty('--pw');
   $('hintsCk').checked=!UXS.hints;$('hudCk').checked=!!UXS.hud;$('bannerX').setAttribute('aria-label',T('ux_close'));$('menuBtn').setAttribute('aria-label',T('ux_menu'));
   document.querySelectorAll('.xbtn').forEach(x=>{x.setAttribute('aria-label',T('ux_close'));x.title=T('ux_close')})}
-function uxLang(){uxApply();segSel('langM','l',lang);syncInstall();$('fsBtn').setAttribute('aria-label',T('ux_fs'))}
+function uxLang(){uxApply();renderStore();segSel('langM','l',lang);syncInstall();$('fsBtn').setAttribute('aria-label',T('ux_fs'))}
 const nowLocal=()=>{const d=new Date();return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+'T'+pad2(d.getHours())+':'+pad2(d.getMinutes())};
 const desk=()=>innerWidth>900&&!(innerHeight<=520&&innerWidth>innerHeight);
 
@@ -1993,7 +2011,7 @@ addEventListener('resize',()=>{if(UXS.panelW)$('panel').style.setProperty('--pw'
 
 /* menu */
 function toggleMenu(on){const m=$('menu');on=on===undefined?m.hidden:on;m.hidden=!on;$('menuBtn').setAttribute('aria-expanded',on);if(on){$('clockM').innerHTML=$('clock').innerHTML;syncInstall();
-  $('panelM').hidden=$('wideM').hidden=!desk()}}
+  $('panelM').hidden=$('wideM').hidden=!desk();LHStore.estimate()}}
 $('menuBtn').onclick=e=>{e.stopPropagation();toggleMenu()};
 document.addEventListener('pointerdown',e=>{if(!$('menu').hidden&&!e.target.closest('#menu,#menuBtn'))toggleMenu(false)});
 document.querySelectorAll('#langM button').forEach(b=>b.onclick=()=>{lang=b.dataset.l;applyLang()});
@@ -2024,6 +2042,20 @@ $('qSave').onclick=()=>{const st=$('qStat'),id=$('qId').value.trim();
   putInput('truck',d,use?use.uid:null);
   st.innerHTML='<span class="okc">'+esc(T(use?'q_updated':'q_added')+': '+id+' · '+T(qEv==='actual_arrival'?'q_arr':qEv==='docked_at'?'q_dock':'q_dep')+' '+tm.replace('T',' '))+'</span>';
   $('qId').value='';$('qPal').value='';$('qDock').value='';$('qTime').value=nowLocal();renderEntryList();buildQuick();afterFactLoad()};
+/* ---- on-device storage status (store.js) ---- */
+const fmtB=b=>b==null?'—':b<1048576?(b/1024).toFixed(b<10240?1:0)+' KB':b<1073741824?(b/1048576).toFixed(1)+' MB':(b/1073741824).toFixed(1)+' GB';
+let storeBarGone=false;
+function renderStore(){const s=LHStore.status;const yn=s.persisted===true?T('st_yes'):s.persisted===false?T('st_no'):T('st_unk');
+  const l1=T('st_line').replace('%s',yn),l2=T('st_use').replace('%u',fmtB(s.usage)).replace('%q',fmtB(s.quota)),
+    l3=s.idb?T('st_mirror').replace('%t',s.lastMirror?fmtDT(s.lastMirror):'—'):T('st_noIdb');
+  setH($('storeTxt'),'<b>'+esc(l1)+'</b>');setH($('storeTxt2'),esc(l2)+'<br>'+esc(l3)+(s.restored?'<br><span class="okc">'+esc(T('st_restored').replace('%n',s.restoredKeys))+'</span>':''));
+  $('persistBtn').hidden=s.persisted===true||!(navigator.storage&&navigator.storage.persist);
+  setH($('storeM'),esc(l1)+'<br>'+esc(l2));
+  let bar=null,cls='';if(s.lsQuota||s.idbQuota){bar=(s.lsQuota&&!s.idbQuota&&s.idb)?T('st_quotaLS'):T('st_quotaAll');cls='err'}else if(s.restored){bar=T('st_restored').replace('%n',s.restoredKeys);cls='ok'}
+  $('storeBar').hidden=!bar||storeBarGone;$('storeBar').className='sbar '+cls;if(bar)$('storeBarTxt').textContent=bar}
+$('storeBarX').onclick=()=>{storeBarGone=true;renderStore()};
+$('persistBtn').onclick=async()=>{await LHStore.persist(true);renderStore()};
+LHStore.onChange(()=>{if(LHStore.status.lsQuota||LHStore.status.idbQuota)storeBarGone=false;renderStore()});
 uxApply();
 
 /* ================= SCENE SWITCH ================= */
@@ -2068,7 +2100,7 @@ document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return
   else if(e.code==='KeyE'){e.preventDefault();openEntry('cur')}});
 
 /* ================= LANGUAGE ================= */
-function applyLang(){document.documentElement.lang=lang;try{localStorage.setItem('lhub.lang',lang)}catch(e){}
+function applyLang(){document.documentElement.lang=lang;LHStore.set('lhub.lang',lang);
   document.querySelectorAll('[data-t]').forEach(el=>el.textContent=T(el.dataset.t));
   document.querySelectorAll('[data-tip]').forEach(el=>el.title=T(el.dataset.tip));
   document.querySelectorAll('[data-ph]').forEach(el=>el.placeholder=T(el.dataset.ph));
@@ -2098,7 +2130,7 @@ window.__hub={get scene(){return scene},get dmode(){return dmode},setMode,enterH
   ds:()=>{const d=getDS();return{trucks:d.trucks.length,orders:d.orders.length,stockRack:d.stockRack,prod:Object.keys(d.prod).length}},reportCSV,get clock(){return clock},
   factObjects:()=>factG.children.length,simVisible:()=>simG.visible};
 })();
-</script>
+};(window.LHStore?LHStore.ready:Promise.resolve()).then(function(){window.__lhubMain()});</script>
 <div id="pwaBar" hidden role="status"><span class="t" id="pwaTxt"></span><button id="pwaOk" class="pri"></button><button id="pwaX" aria-label="close">✕</button></div>
 <script src="./pwa.js"></script>
 </body></html>
