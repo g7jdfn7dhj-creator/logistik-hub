@@ -1,7 +1,7 @@
 /* Logistik-Hub PWA service worker.
    Shell (index, manifest, icons, vendored three.js, self-hosted fonts): cache-first, versioned cache.
    Everything else — including any Arbeitzeit GET data URL and all cross-origin requests — is network-only and never cached. */
-const VERSION='lhub-pwa-v2';
+const VERSION='lhub-pwa-v3';
 const SHELL=[
 "./",
 "./index.html",
@@ -35,7 +35,7 @@ const SHELL=[
 ];
 const SCOPE=new URL('./',self.location).href;
 const SHELL_SET=new Set(SHELL.map(p=>new URL(p,SCOPE).href));
-self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(SHELL)))});   // no auto skipWaiting: the page shows an update notice
+self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(SHELL.map(u=>new Request(u,{cache:'reload'})))))});   // cache:'reload' bypasses the browser HTTP cache, so a new version never stores stale files   // no auto skipWaiting: the page shows an update notice
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('lhub-pwa-')&&k!==VERSION).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('message',e=>{if(e.data==='SKIP_WAITING')self.skipWaiting()});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;
