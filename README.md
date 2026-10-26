@@ -1,4 +1,8 @@
-# Logistik-Hub v5.2 — PWA (Lagerlayout-Editor)
+# Logistik-Hub v5.3 — PWA (Lagerlayout-Editor)
+
+## Neu in v5.3
+- **Hallenhöhe**: Feld + Schieberegler im Raum-Tab (leer = Anzeige mit 7 m, nicht gespeichert). Wände und Decke im 3D folgen dem Wert, auch live über „3D-Vorschau“. Der 2D-Plan zeigt ein Höhen-Badge `H = x,x m` und eine Seitenansicht mit den Höhen von Regalen, Trennwänden und Objekten. Regale, Trennwände und Objekte, die höher als die Halle sind, werden als Fehler gemeldet und blockieren das Speichern. Die Höhe ist in Rückgängig, JSON-Export/-Import, Backup und Migration enthalten (alte Layouts: leer).
+- **LKW-Einfahrt**: Der LKW fährt durch das (auf 5,4 m verbreiterte) Tor in die Halle, hält neben der verknüpften Entladefläche (im Tor wählbar, sonst die nächste), wird darauf entladen und fährt wieder hinaus. Ist die Halle zu niedrig (< 4,5 m) oder fehlt ein Fahrweg, warnt der Editor und der LKW entlädt wie bisher am Tor.
 
 Gegenüber v5.1 neu: **Lagerlayout-Editor** (Parameter → „Lagerlayout bearbeiten“ bzw. Hinweis im leeren Lager).
 
@@ -12,4 +16,4 @@ Gegenüber v5.1 neu: **Lagerlayout-Editor** (Parameter → „Lagerlayout bearbe
 - **Prozess (nur manuell):** Regeln Teil / Teilegruppe (Präfix) / Tor → Ziel-Regal/-Fläche, Anliefertor, Auslagerweg (Ausgang); Einlagerreihenfolge. Wirkt als Lagerort-Vorschlag bei der Eingabe und steuert LKW-Tor und Weg der Logistiker in der Animation. Daten werden nie automatisch verschoben.
 - **3D** wird aus dem gespeicherten Layout aufgebaut; Stapler und Logistiker laufen über ein Wegeraster um die Regale herum.
 - **Migration:** bestehende Installationen (v5.1) erhalten ihre feste Halle (4 × 20 × 3 = 240 Plätze) als bearbeitbares Layout; alle Lagerorte bleiben gültig. Neue Installationen starten ohne Layout.
-- Speicherung nur lokal: `lhub.r4.layout` (localStorage + IndexedDB-Spiegel). Service-Worker-Cache `lhub-pwa-v5-2`.
+- Speicherung nur lokal: `lhub.r4.layout` (localStorage + IndexedDB-Spiegel). Service-Worker-Cache `lhub-pwa-v5-3`.
