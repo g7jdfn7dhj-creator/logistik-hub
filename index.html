@@ -1,6 +1,6 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Logistik-Hub</title>
-<meta name="app-version" content="lhub-pwa-v5-3">
+<meta name="app-version" content="lhub-pwa-v5-3-1">
 <link rel="stylesheet" href="./fonts/fonts.css">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#161d26">
@@ -322,6 +322,7 @@ body[data-scene="campus"] #animQ{top:auto;bottom:14px}
 
 /* ===== v5.2 layout editor ===== */
 .le-hrow{display:flex;align-items:center;gap:10px;margin:4px 0 8px}.le-hrow input[type=range]{flex:1;accent-color:#f2b705;min-height:32px}.le-hrow b{font:600 15px "Saira Condensed",sans-serif;color:#f2b705;white-space:nowrap}
+#leElev[aria-pressed="true"]{background:#2f5fa8;border-color:#6b9cf0}
 #layEd.peek{background:transparent;pointer-events:none}#layEd.peek .le-top,#layEd.peek .le-side,#layEd.peek .le-msg{pointer-events:auto}#layEd.peek #leCv,#layEd.peek .le-ptools,#layEd.peek .le-hint{visibility:hidden}
 .le-lib{margin:8px 0;border:1px solid #33414f;border-radius:8px;padding:6px 8px;background:#161f29}.le-lib summary{cursor:pointer;font:600 15px "Saira Condensed",sans-serif;color:#f2b705}
 .le-libg{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px;margin-top:6px}
@@ -370,7 +371,7 @@ body.le-on{overflow:hidden}
   .le-top{gap:4px;padding:6px}.le-top button{padding:4px 8px;min-height:36px}.le-ttl{display:none}.le-f{grid-template-columns:1fr 120px 30px}}
 </style></head><body data-scene="campus">
 <header class="pad">
-  <h1>Logistik-Hub<span class="r4"> v5.3</span><small id="sub"></small></h1>
+  <h1>Logistik-Hub<span class="r4"> v5.3.1</span><small id="sub"></small></h1>
   <button id="addBtn" data-entry="new" data-tip="ux_addTip"><span class="ic" aria-hidden="true">+</span><span class="lbl" data-t="ux_add"></span></button>
   <div class="hright"><button id="installBtn" class="pri" hidden>⤓ Установить приложение</button><div class="clock" id="clock"></div>
     <div class="seg sm" id="lang"><button data-l="ru">RU</button><button data-l="de">DE</button></div><button id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="menu" data-tip="ux_menu">☰</button></div>
@@ -639,9 +640,9 @@ const T=k=>{const v=I18N[lang][k];return v===undefined?k:v};
 const $=id=>document.getElementById(id);
 const DISP='"Saira Condensed","Roboto Condensed","Arial Narrow",sans-serif';
 /* v5.3 hall height + drive-in trucks */
-Object.assign(I18N.de,{ed_hallH:"Hallenhöhe",ed_hallNote:"Leer = Anzeige mit 7 m (nicht gespeichert). Wände und Decke im 3D folgen dem Wert; Regale, Trennwände und Objekte dürfen nicht höher sein.",ed_hallDef:"Standard-Anzeige",ed_hallClr:"Leeren",ed_peek:"3D-Vorschau",ed_peekX:"Zurück zum Plan",ed_elev:"Höhen (Seitenansicht)",ed_pad:"Entladefläche (LKW-Einfahrt)",ed_padAuto:"automatisch: nächste",ed_dockDrive:"Der LKW fährt durch das Tor in die Halle, hält neben der Entladefläche, wird entladen und fährt wieder hinaus. Ohne Entladefläche oder ohne Platz entlädt er am Tor.",
+Object.assign(I18N.de,{ed_elevBtn:"Höhen",ed_elevTip:"Höhen-Seitenansicht ein-/ausblenden",ed_hallH:"Hallenhöhe",ed_hallNote:"Leer = Anzeige mit 7 m (nicht gespeichert). Wände und Decke im 3D folgen dem Wert; Regale, Trennwände und Objekte dürfen nicht höher sein.",ed_hallDef:"Standard-Anzeige",ed_hallClr:"Leeren",ed_peek:"3D-Vorschau",ed_peekX:"Zurück zum Plan",ed_elev:"Höhen (Seitenansicht)",ed_pad:"Entladefläche (LKW-Einfahrt)",ed_padAuto:"automatisch: nächste",ed_dockDrive:"Der LKW fährt durch das Tor in die Halle, hält neben der Entladefläche, wird entladen und fährt wieder hinaus. Ohne Entladefläche oder ohne Platz entlädt er am Tor.",
  v_tooHigh:"Höher als die Halle",v_hallH:"Hallenhöhe ungültig",v_truckLow:"Halle zu niedrig für LKW-Einfahrt (min. 4,5 m) – LKW entlädt am Tor",v_truckSpace:"Kein Fahrweg für den LKW bis zur Entladefläche – LKW entlädt am Tor"});
-Object.assign(I18N.ru,{ed_hallH:"Высота цеха",ed_hallNote:"Пусто = показ с 7 м (не сохраняется). Стены и потолок в 3D следуют значению; стеллажи, перегородки и объекты не могут быть выше.",ed_hallDef:"показ по умолчанию",ed_hallClr:"Очистить",ed_peek:"3D-просмотр",ed_peekX:"Назад к плану",ed_elev:"Высоты (вид сбоку)",ed_pad:"Зона разгрузки (въезд фуры)",ed_padAuto:"автоматически: ближайшая",ed_dockDrive:"Фура въезжает через ворота в цех, встаёт рядом с зоной разгрузки, разгружается и выезжает. Без зоны разгрузки или без места — разгрузка у ворот.",
+Object.assign(I18N.ru,{ed_elevBtn:"Высоты",ed_elevTip:"Показать/скрыть вид сбоку с высотами",ed_hallH:"Высота цеха",ed_hallNote:"Пусто = показ с 7 м (не сохраняется). Стены и потолок в 3D следуют значению; стеллажи, перегородки и объекты не могут быть выше.",ed_hallDef:"показ по умолчанию",ed_hallClr:"Очистить",ed_peek:"3D-просмотр",ed_peekX:"Назад к плану",ed_elev:"Высоты (вид сбоку)",ed_pad:"Зона разгрузки (въезд фуры)",ed_padAuto:"автоматически: ближайшая",ed_dockDrive:"Фура въезжает через ворота в цех, встаёт рядом с зоной разгрузки, разгружается и выезжает. Без зоны разгрузки или без места — разгрузка у ворот.",
  v_tooHigh:"Выше цеха",v_hallH:"Неверная высота цеха",v_truckLow:"Цех слишком низкий для въезда фуры (мин. 4,5 м) — разгрузка у ворот",v_truckSpace:"Нет проезда для фуры до зоны разгрузки — разгрузка у ворот"});
 
 /* ================= WAREHOUSE LAYOUT MODEL (v5.2) — user-defined room + racks / floor areas / docks / exits + manual process rules.
@@ -1967,8 +1968,8 @@ function emptyLayout(){return{v:1,mode:null,room:{shape:null,len:0,wid:0},grid:{
 function layoutSummary(){const L=LAYOUT;let h=`<details open id="laySum"><summary>${T('g_layout')}</summary>`;
   if(!L)h+=`<div class="note">${T('lay_none')}</div>`;
   else{const c=k=>L.objs.filter(o=>o.kind===k).length,P=roomPoly(L.room),bb=P&&bbox(P);
-    h+=`<div class="kv"><span>${T('ed_room')}</span><b>${T('sh_'+L.room.shape)} · ${bb?fmtX(+bb.w.toFixed(2))+' × '+fmtX(+bb.h.toFixed(2))+' m':''}</b><span>${T('ed_mode')}</span><b>${L.mode?T('mode_'+L.mode):'—'}</b>
-      <span>${T('ed_hallH')}</span><b>H = ${fmt1(hallH(L))} m${hallSet(L)?'':' ('+T('ed_hallDef')+')'}</b><span>${T('ed_racks')}</span><b>${c('rack')}</b><span>${T('ed_areas')}</span><b>${L.objs.filter(o=>o.kind==='area'&&!isUnload(o)).length}</b><span>${T('lay_rack')}</span><b>${SLOTS_N}</b>
+    h+=`<div class="kv"><span>${T('ed_room')}</span><b>${T('sh_'+L.room.shape)} · ${bb?fmtX(+bb.w.toFixed(2))+' × '+fmtX(+bb.h.toFixed(2))+' '+UM():''}</b><span>${T('ed_mode')}</span><b>${L.mode?T('mode_'+L.mode):'—'}</b>
+      <span>${T('ed_hallH')}</span><b>H = ${fmt1(hallH(L))} ${UM()}${hallSet(L)?'':' ('+T('ed_hallDef')+')'}</b><span>${T('ed_racks')}</span><b>${c('rack')}</b><span>${T('ed_areas')}</span><b>${L.objs.filter(o=>o.kind==='area'&&!isUnload(o)).length}</b><span>${T('lay_rack')}</span><b>${SLOTS_N}</b>
       <span>${T('ed_unloads')}</span><b>${L.objs.filter(isUnload).length}</b><span>${T('ed_walls')}</span><b>${c('wall')}</b><span>${T('ed_docks')}</span><b>${c('dock')}</b><span>${T('ed_exits')}</span><b>${c('exit')}</b><span>${T('ed_rules')}</span><b>${(L.proc.rules||[]).length}</b><span>${T('lay_fmt')}</span><b>R1-05-2 · F1</b></div>`;
     if(L.migratedFrom)h+=`<div class="note">${T('lay_migr')}</div>`}
   return h+`<div class="rowb"><button class="pri" data-layed="1">${T('ed_open')}</button></div></details>`}
@@ -1979,7 +1980,7 @@ le.innerHTML=`<div class="le-top"><b class="le-ttl" id="leTtl"></b><div class="s
   <span class="le-sp"></span><button id="leUndo" title="Ctrl+Z">↶</button><button id="leRedo" title="Ctrl+Y">↷</button><button id="leExp"></button><button id="leImpB"></button><input type="file" id="leImp" accept=".json,application/json" hidden>
   <button id="leCancel"></button><button id="leSave" class="pri"></button></div>
   <div class="le-body"><div class="le-plan" id="lePlan"><canvas id="leCv"></canvas>
-    <div class="le-ptools"><button id="leZin">+</button><button id="leZout">−</button><button id="leFit">⤢</button><label><span id="leGridL"></span> <input id="leGrid" type="number" min="0.1" step="any" inputmode="decimal"> m</label><label class="ck"><input type="checkbox" id="leSnap"><span id="leSnapL"></span></label><span id="leCoord" class="mut"></span></div>
+    <div class="le-ptools"><button id="leZin">+</button><button id="leZout">−</button><button id="leFit">⤢</button><button id="leElev" aria-pressed="true"></button><label><span id="leGridL"></span> <input id="leGrid" type="number" min="0.1" step="any" inputmode="decimal"> <span class="um">m</span></label><label class="ck"><input type="checkbox" id="leSnap"><span id="leSnapL"></span></label><span id="leCoord" class="mut"></span></div>
     <div class="le-hint" id="leHint"></div></div>
   <div class="le-side" id="leSide"></div></div><div class="le-msg" id="leMsg" role="status"></div>`;
 document.body.appendChild(le);
@@ -2044,10 +2045,10 @@ function edDraw(){if(!ED)return;const {w,h,d}=edSize();if(!ED.view)edFit();const
   if(P){g.beginPath();P.forEach(([x,y],i)=>{const [X,Y]=toS(x,y);i?g.lineTo(X,Y):g.moveTo(X,Y)});g.closePath();g.save();g.shadowColor='rgba(0,0,0,.6)';g.shadowBlur=24;g.fillStyle='#2a333d';g.fill();g.restore();
     {const bb0=bbox(P),[ax,ay]=toS(bb0.x0,bb0.y0),[bx2,by2]=toS(bb0.x1,bb0.y1),gr=g.createLinearGradient(ax,ay,bx2,by2);gr.addColorStop(0,'rgba(150,160,170,.20)');gr.addColorStop(1,'rgba(110,120,130,.12)');g.fillStyle=gr;g.fill()}g.lineJoin='round';g.lineWidth=4;g.strokeStyle=ED.issues.some(i=>!i.id&&i.sev==='err')?'#e5534b':'#c9d0d6';g.stroke();
     // dimensions
-    const bb=bbox(P);g.fillStyle='#9fb0c0';g.font='12px "IBM Plex Mono",monospace';g.textAlign='center';const [ax,ay]=toS(bb.cx,bb.y1);g.fillText(fmtX(+bb.w.toFixed(2))+' m',ax,ay+18);
-    g.save();const [bx,by]=toS(bb.x0,bb.cy);g.translate(bx-14,by);g.rotate(-Math.PI/2);g.fillText(fmtX(+bb.h.toFixed(2))+' m',0,0);g.restore();
+    const bb=bbox(P);g.fillStyle='#9fb0c0';g.font='12px "IBM Plex Mono",monospace';g.textAlign='center';const [ax,ay]=toS(bb.cx,bb.y1);g.fillText(fmtX(+bb.w.toFixed(2))+' '+UM(),ax,ay+18);
+    g.save();const [bx,by]=toS(bb.x0,bb.cy);g.translate(bx-14,by);g.rotate(-Math.PI/2);g.fillText(fmtX(+bb.h.toFixed(2))+' '+UM(),0,0);g.restore();
     if(ED.L.room.shape==='poly'&&ED.tab==='room'){g.fillStyle='#f2b705';P.forEach(([x,y],i)=>{const [X,Y]=toS(x,y);g.beginPath();g.arc(X,Y,5,0,7);g.fill();g.fillText(i+1,X+10,Y-8)})}}
-  if(ED.wdraw&&ED.wdraw.a){const A=toS(...ED.wdraw.a),Bp=ED.wdraw.hover?toS(...ED.wdraw.hover):A;g.strokeStyle='#f2b705';g.lineWidth=4;g.beginPath();g.moveTo(...A);g.lineTo(...Bp);g.stroke();if(ED.wdraw.hover){g.fillStyle='#f2b705';g.font='12px "IBM Plex Mono",monospace';g.fillText(fmtX(+Math.hypot(ED.wdraw.hover[0]-ED.wdraw.a[0],ED.wdraw.hover[1]-ED.wdraw.a[1]).toFixed(2))+' m',Bp[0]+10,Bp[1]-8)}}
+  if(ED.wdraw&&ED.wdraw.a){const A=toS(...ED.wdraw.a),Bp=ED.wdraw.hover?toS(...ED.wdraw.hover):A;g.strokeStyle='#f2b705';g.lineWidth=4;g.beginPath();g.moveTo(...A);g.lineTo(...Bp);g.stroke();if(ED.wdraw.hover){g.fillStyle='#f2b705';g.font='12px "IBM Plex Mono",monospace';g.fillText(fmtX(+Math.hypot(ED.wdraw.hover[0]-ED.wdraw.a[0],ED.wdraw.hover[1]-ED.wdraw.a[1]).toFixed(2))+' '+UM(),Bp[0]+10,Bp[1]-8)}}
   if(ED.draw){const pts=ED.draw.pts;g.strokeStyle='#f2b705';g.lineWidth=2;g.setLineDash([6,4]);g.beginPath();pts.forEach(([x,y],i)=>{const [X,Y]=toS(x,y);i?g.lineTo(X,Y):g.moveTo(X,Y)});if(ED.draw.hover){const [X,Y]=toS(...ED.draw.hover);g.lineTo(X,Y)}g.stroke();g.setLineDash([]);
     g.fillStyle='#f2b705';pts.forEach(([x,y],i)=>{const [X,Y]=toS(x,y);g.beginPath();g.arc(X,Y,i?4:7,0,7);g.fill()})}
   for(const o of ED.L.objs){const C=objCorners(o).map(([x,y])=>toS(x,y));const sel=o.id===ED.sel,er=bad.has(o.id);
@@ -2059,7 +2060,7 @@ function edDraw(){if(!ED)return;const {w,h,d}=edSize();if(!ED.view)edFit();const
     if(o.kind==='wall'){const t=(+o.rot||0)*Math.PI/180;g.lineCap='butt';for(const [a,b] of wallPieces(o)){const A=toS(o.x+a*Math.cos(t),o.y+a*Math.sin(t)),Bp=toS(o.x+b*Math.cos(t),o.y+b*Math.sin(t));
         g.strokeStyle=er?'#e5534b':sel?'#ffffff':'#c3ccd6';g.lineWidth=Math.max(4,0.12*s);g.beginPath();g.moveTo(...A);g.lineTo(...Bp);g.stroke();g.strokeStyle='#5d6b78';g.lineWidth=1;g.setLineDash([3,3]);g.beginPath();g.moveTo(...A);g.lineTo(...Bp);g.stroke();g.setLineDash([])}
       if(+o.gapW>0){const L2=o.len/2,gc=-L2+(has(o.gapAt)?+o.gapAt:L2),gw=+o.gapW,A=toS(o.x+(gc-gw/2)*Math.cos(t),o.y+(gc-gw/2)*Math.sin(t)),r=gw*s;g.strokeStyle='rgba(126,226,168,.8)';g.lineWidth=1;g.beginPath();g.arc(A[0],A[1],r,t,t-Math.PI/2,true);g.stroke()}
-      const [X,Y]=toS(o.x,o.y);g.fillStyle='#c3ccd6';g.font='11px "IBM Plex Mono",monospace';g.textAlign='center';g.fillText(objCode(o)+' · '+fmtX(+(+o.len).toFixed(2))+' m',X-Math.sin(t)*14,Y+Math.cos(t)*14+4);continue}
+      const [X,Y]=toS(o.x,o.y);g.fillStyle='#c3ccd6';g.font='11px "IBM Plex Mono",monospace';g.textAlign='center';g.fillText(objCode(o)+' · '+fmtX(+(+o.len).toFixed(2))+' '+UM(),X-Math.sin(t)*14,Y+Math.cos(t)*14+4);continue}
     if(o.kind==='dock'||o.kind==='exit'){const col=o.kind==='dock'?'#6b9cf0':'#b5d334';g.beginPath();C.forEach(([X,Y],i)=>i?g.lineTo(X,Y):g.moveTo(X,Y));g.closePath();g.fillStyle=col;g.fill();
       if(P){const ws=wallSnap(P,o.x,o.y);const [X,Y]=toS(o.x,o.y);const k=o.kind==='dock'?-1:1;g.strokeStyle=col;g.lineWidth=2;g.beginPath();g.moveTo(X+ws.nx*22,Y+ws.ny*22);g.lineTo(X,Y);g.stroke();
         g.beginPath();const ax=k<0?X:X+ws.nx*22,ay=k<0?Y:Y+ws.ny*22,dx=ws.nx*k,dy=ws.ny*k;g.moveTo(ax+dx*8,ay+dy*8);g.lineTo(ax-dy*5,ay+dx*5);g.lineTo(ax+dy*5,ay-dx*5);g.fill();
@@ -2086,10 +2087,10 @@ function edDraw(){if(!ED)return;const {w,h,d}=edSize();if(!ED.view)edFit();const
   if(ED.tab==='proc'&&P){g.lineWidth=2;for(const r of ED.L.proc.rules){const t=ED.L.objs.find(o=>o.id===r.target);if(!t)continue;const dk=ED.L.objs.find(o=>o.id===r.dock),ex=ED.L.objs.find(o=>o.id===r.exit);
       const arr=(a,b,col)=>{const [X1,Y1]=toS(a.x,a.y),[X2,Y2]=toS(b.x,b.y);g.strokeStyle=col;g.fillStyle=col;g.setLineDash([7,5]);g.beginPath();g.moveTo(X1,Y1);g.lineTo(X2,Y2);g.stroke();g.setLineDash([]);const an=Math.atan2(Y2-Y1,X2-X1);g.beginPath();g.moveTo(X2,Y2);g.lineTo(X2-10*Math.cos(an-0.4),Y2-10*Math.sin(an-0.4));g.lineTo(X2-10*Math.cos(an+0.4),Y2-10*Math.sin(an+0.4));g.fill()};
       if(dk)arr(dk,t,'#6b9cf0');if(ex)arr(t,ex,'#b5d334')}}
-  {const HH=hallH(ED.L),hs=hallSet(ED.L);g.font='600 14px "Saira Condensed",sans-serif';const tx='H = '+fmt1(HH)+' m'+(hs?'':' ('+T('ed_hallDef')+')');const tw=g.measureText(tx).width+22;
+  {const HH=hallH(ED.L),hs=hallSet(ED.L);g.font='600 14px "Saira Condensed",sans-serif';const tx='H = '+fmt1(HH)+' '+UM()+(hs?'':' ('+T('ed_hallDef')+')');const tw=g.measureText(tx).width+22;
     g.fillStyle='rgba(13,18,24,.88)';g.strokeStyle=hs?'#f2b705':'#6d7a87';g.lineWidth=1.5;g.beginPath();g.roundRect?g.roundRect(12,12,tw,28,6):g.rect(12,12,tw,28);g.fill();g.stroke();g.fillStyle=hs?'#f2b705':'#c9d0d6';g.textAlign='left';g.textBaseline='middle';g.fillText(tx,23,27);g.textBaseline='alphabetic';
-    const it=ED.L.objs.filter(o=>(o.kind==='rack'||o.kind==='wall'||(o.kind==='deco'&&+o.h>0))&&objH(o)>0).sort((a,b)=>(a.kind==='rack'?0:a.kind==='wall'?1:2)-(b.kind==='rack'?0:b.kind==='wall'?1:2)||a.no-b.no).slice(0,32);
-    const pw=Math.min(420,w*0.46),ph=124,px=w-pw-12,py=h-ph-46;ED.elev={x:px,y:py,w:pw,h:ph};
+    if(elevOn()){const it=ED.L.objs.filter(o=>(o.kind==='rack'||o.kind==='wall'||(o.kind==='deco'&&+o.h>0))&&objH(o)>0).sort((a,b)=>(a.kind==='rack'?0:a.kind==='wall'?1:2)-(b.kind==='rack'?0:b.kind==='wall'?1:2)||a.no-b.no).slice(0,32);
+    const nar=w<560,pw=Math.min(420,w*(nar?0.52:0.46)),ph=nar?96:124,px=w-pw-12,py=h-ph-(nar?106:46);ED.elev={x:px,y:py,w:pw,h:ph};
     g.fillStyle='rgba(13,18,24,.9)';g.strokeStyle='#33414f';g.lineWidth=1;g.beginPath();g.roundRect?g.roundRect(px,py,pw,ph,8):g.rect(px,py,pw,ph);g.fill();g.stroke();
     g.fillStyle='#f2b705';g.font='600 12px "Saira Condensed",sans-serif';g.textAlign='left';g.fillText(T('ed_elev'),px+10,py+15);
     const top=py+24,bot=py+ph-18,mx=Math.max(HH,...it.map(objH))*1.08,sy=(bot-top)/mx,x0=px+34,x1=px+pw-10;
@@ -2101,15 +2102,21 @@ function edDraw(){if(!ED)return;const {w,h,d}=edSize();if(!ED.view)edFit();const
       g.fillRect(bx,bot-hh*sy,b2,hh*sy);if(o.kind==='rack'){g.strokeStyle='rgba(242,183,5,.8)';g.beginPath();for(let l=0;l<=o.levels;l++){const yy=bot-(0.12+l*LV_PITCH)*sy;g.moveTo(bx,yy);g.lineTo(bx+b2,yy)}g.stroke()}
       if(over){g.strokeStyle='#ff9ea1';g.lineWidth=2;g.strokeRect(bx,bot-hh*sy,b2,hh*sy);g.lineWidth=1}
       g.textAlign='center';g.fillStyle=over?'#ff9ea1':'#dfe5ea';if(bw>=20)g.fillText(fmt1(hh),bx+b2/2,Math.max(top+8,bot-hh*sy-3));if(bw>=14){g.fillStyle='#8a96a3';g.fillText(objCode(o),bx+b2/2,bot+12)}});
-    if(!it.length){g.fillStyle='#8a96a3';g.textAlign='center';g.fillText('—',px+pw/2,(top+bot)/2)}}
-  {let L0=[1,2,5,10,20,50,100].find(x=>x*s>=60)||100;const bw=L0*s,bx=w-bw-18,by=h-18;g.fillStyle='rgba(13,18,24,.8)';g.fillRect(bx-8,by-20,bw+16,28);g.strokeStyle='#dfe5ea';g.lineWidth=2;g.beginPath();g.moveTo(bx,by-4);g.lineTo(bx,by);g.lineTo(bx+bw,by);g.lineTo(bx+bw,by-4);g.stroke();g.fillStyle='#dfe5ea';g.font='11px "IBM Plex Mono",monospace';g.textAlign='center';g.fillText(L0+' m',bx+bw/2,by-7)}
+    if(!it.length){g.fillStyle='#8a96a3';g.textAlign='center';g.fillText('—',px+pw/2,(top+bot)/2)}}}
+  {let L0=[1,2,5,10,20,50,100].find(x=>x*s>=60)||100;const bw=L0*s,bx=w-bw-18,by=h-18;g.fillStyle='rgba(13,18,24,.8)';g.fillRect(bx-8,by-20,bw+16,28);g.strokeStyle='#dfe5ea';g.lineWidth=2;g.beginPath();g.moveTo(bx,by-4);g.lineTo(bx,by);g.lineTo(bx+bw,by);g.lineTo(bx+bw,by-4);g.stroke();g.fillStyle='#dfe5ea';g.font='11px "IBM Plex Mono",monospace';g.textAlign='center';g.fillText(L0+' '+UM(),bx+bw/2,by-7)}
   $('leHint').textContent=ED.wdraw?T('ed_wdrawHint'):ED.draw?T('ed_drawHint'):!P?T('ed_noRoomHint'):ED.add?T('ed_addHint'):'';$('leHint').hidden=!$('leHint').textContent}
 /* ---------- validation + messages ---------- */
 function edCheck(){ED.issues=validateLayout(ED.L);const by=id=>{const o=ED.L.objs.find(x=>x.id===id);return o?objLabel(o):''};
-  $('leMsg').innerHTML=ED.issues.length?ED.issues.map(i=>`<span class="${i.sev==='err'?'err':'wrn'}">${i.sev==='err'?'✖':'⚠'} ${esc(T(i.key))}${i.id?': '+esc(by(i.id)):''}${i.id2?' ↔ '+esc(by(i.id2)):''}${i.hv?' ('+fmt1(i.hv[0])+' m > '+fmt1(i.hv[1])+' m)':''}</span>`).join(' '):`<span class="okc">✔ ${T('v_ok')}</span>`}
+  $('leMsg').innerHTML=ED.issues.length?ED.issues.map(i=>`<span class="${i.sev==='err'?'err':'wrn'}">${i.sev==='err'?'✖':'⚠'} ${esc(T(i.key))}${i.id?': '+esc(by(i.id)):''}${i.id2?' ↔ '+esc(by(i.id2)):''}${i.hv?' ('+fmt1(i.hv[0])+' '+UM()+' > '+fmt1(i.hv[1])+' m)':''}</span>`).join(' '):`<span class="okc">✔ ${T('v_ok')}</span>`}
 /* ---------- side panel ---------- */
+/* elevation strip: shown/hidden by the user, remembered locally (lhub.r4.edElev); default: shown, but collapsed on phones */
+const ELEVKEY='lhub.r4.edElev';
+function elevPhone(){try{return innerWidth<600||(matchMedia('(pointer:coarse)').matches&&Math.min(screen.width,screen.height)<600)}catch(e){return innerWidth<600}}
+function elevOn(){const v=LHStore.get(ELEVKEY);return v===null||v===undefined?!elevPhone():v==='1'}
+function elevBtn(){const b=$('leElev');if(!b)return;b.textContent='▤ '+T('ed_elevBtn');b.title=T('ed_elevTip');b.setAttribute('aria-pressed',elevOn());b.setAttribute('aria-label',T('ed_elevTip'))}
+function UM(){return lang==='ru'?'м':'m'}
 const fmt1=v=>(+v).toFixed(1).replace('.',lang==='en'?'.':',');
-const numIn=(id,val,lab,unit,extra)=>`<label class="le-f"><span>${esc(lab)}</span><input id="${id}" type="number" inputmode="decimal" step="any" value="${val===null||val===undefined||val===''||(typeof val==='number'&&!isFinite(val))?'':val}" ${extra||''}><i>${unit||''}</i></label>`;
+const numIn=(id,val,lab,unit,extra)=>`<label class="le-f"><span>${esc(lab)}</span><input id="${id}" type="number" inputmode="decimal" step="any" value="${val===null||val===undefined||val===''||(typeof val==='number'&&!isFinite(val))?'':val}" ${extra||''}><i>${unit==='m'?UM():(unit||'')}</i></label>`;
 function edSide(){const L=ED.L,sd=$('leSide');let h='';
   if(ED.tab==='room'){const r=L.room;
     h+=`<h3>${T('ed_room')}</h3><div class="seg le-shapes">${ROOM_SHAPES.map(k=>`<button data-shape="${k}" aria-pressed="${r.shape===k}">${T('sh_'+k)}</button>`).join('')}</div>`;
@@ -2165,7 +2172,7 @@ function edBindSide(){const L=ED.L;
   le.querySelectorAll('[data-shape]').forEach(b=>b.onclick=()=>{edPush();L.room.shape=b.dataset.shape;if(b.dataset.shape==='poly'&&!L.room.pts)L.room.pts=[];ED.draw=null;edAll();edFit();edDraw()});
   le.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{edPush();L.mode=b.dataset.mode;edAll()});
   for(const k of['rLen','rWid'])if($(k))$(k).onchange=()=>{const v=readNum(k);if(v!==null&&!(v>0)){$(k).classList.add('inv');return}if(L.room[k==='rLen'?'len':'wid']===(v||0))return;edPush();L.room[k==='rLen'?'len':'wid']=v||0;$(k).classList.remove('inv');for(const o of L.objs)if(o.kind==='dock'||o.kind==='exit')snapDoor(o);edAll(true);edFit();edDraw()};
-  if($('rH')){const fld=$('rH'),sl=$('rHs'),show=()=>{const hv=hallH(L);$('rHv').textContent='H = '+fmt1(hv)+' m';sl.value=hv;$('rHc').disabled=!hallSet(L);$('rHd').hidden=hallSet(L);edPeekH()};
+  if($('rH')){const fld=$('rH'),sl=$('rHs'),show=()=>{const hv=hallH(L);$('rHv').textContent='H = '+fmt1(hv)+' '+UM();sl.value=hv;$('rHc').disabled=!hallSet(L);$('rHd').hidden=hallSet(L);edPeekH()};
     fld.onchange=()=>{const v=readNum('rH');if(v!==null&&!(v>0)){fld.classList.add('inv');return}fld.classList.remove('inv');if((L.room.h??null)===v)return;edPush();L.room.h=v;show();edAll(true)};
     sl.oninput=()=>{const v=Math.round(+sl.value*10)/10;if(!ED.hDrag){edPush();ED.hDrag=true}L.room.h=v;fld.value=v;fld.classList.remove('inv');show();edAll(true)};
     sl.onchange=()=>{ED.hDrag=false};
@@ -2218,10 +2225,12 @@ function edSoft(){const o=selObj();const h=le.querySelector('.le-card h3');if(o&
   le.querySelectorAll('.le-list [data-sel]').forEach(b=>{const x=ED.L.objs.find(q=>q.id===b.dataset.sel);if(x)b.childNodes[1].textContent=objLabel(x)})}
 function edAll(soft){if(!ED)return;$('leTtl').textContent=T('ed_title');le.querySelectorAll('[data-et]').forEach(b=>{b.textContent=T('ed_tab_'+b.dataset.et);b.setAttribute('aria-pressed',b.dataset.et===ED.tab)});
   $('leUndo').disabled=!ED.hist.length;$('leRedo').disabled=!ED.fut.length;$('leExp').textContent='⇩ '+T('ed_exp');$('leImpB').textContent='⇧ '+T('ed_imp');$('leCancel').textContent=T('ed_cancel');$('leSave').textContent='✔ '+T('ed_save');
+  elevBtn();le.querySelectorAll('.um').forEach(e=>e.textContent=UM());
   $('leGridL').textContent=T('ed_grid');$('leSnapL').textContent=T('ed_snap');$('leGrid').value=ED.L.grid.step||'';$('leSnap').checked=ED.L.grid.snap!==false;
   edCheck();if(!soft)edSide();else edSoft();edDraw()}
 /* ---------- top bar ---------- */
 le.querySelectorAll('[data-et]').forEach(b=>b.onclick=()=>{ED.tab=b.dataset.et;ED.add=null;if(ED.draw&&ED.tab!=='room')ED.draw=null;edAll()});
+$('leElev').onclick=()=>{LHStore.set(ELEVKEY,elevOn()?'0':'1');elevBtn();edDraw()};
 $('leUndo').onclick=edUndo;$('leRedo').onclick=edRedo;
 $('leZin').onclick=()=>{const r=cv.getBoundingClientRect();zoomAt(1.25,r.width/2,r.height/2)};$('leZout').onclick=()=>{const r=cv.getBoundingClientRect();zoomAt(0.8,r.width/2,r.height/2)};$('leFit').onclick=()=>{edFit();edDraw()};
 $('leGrid').onchange=()=>{const v=readNum('leGrid');if(v!==null&&!(v>0)){$('leGrid').classList.add('inv');return}$('leGrid').classList.remove('inv');edPush();ED.L.grid.step=v;edAll(true)};
@@ -2252,7 +2261,7 @@ cv.addEventListener('pointerdown',e=>{if(!ED)return;try{cv.setPointerCapture(e.p
   const o=ED.tab==='room'?null:hitObj(x,y);
   if(o){if(ED.sel!==o.id){ED.sel=o.id;ED.add=null;if(ED.tab!=='obj')ED.tab='obj';edAll()}edDrag={mode:'obj',o,dx:x-o.x,dy:y-o.y,moved:false,sx,sy}}
   else{edDrag={mode:'pan',sx,sy,ox:ED.view.ox,oy:ED.view.oy,moved:false}}});
-cv.addEventListener('pointermove',e=>{if(!ED)return;const [sx,sy]=evXY(e);const [x,y]=toW(sx,sy);$('leCoord').textContent=fmtX(+x.toFixed(2))+' / '+fmtX(+y.toFixed(2))+' m';
+cv.addEventListener('pointermove',e=>{if(!ED)return;const [sx,sy]=evXY(e);const [x,y]=toW(sx,sy);$('leCoord').textContent=fmtX(+x.toFixed(2))+' / '+fmtX(+y.toFixed(2))+' '+UM();
   if(ED.draw){ED.draw.hover=[snapV(x),snapV(y)];edDraw()}
   if(ED.wdraw){ED.wdraw.hover=[snapV(x),snapV(y)];edDraw()}
   const p=eptr.get(e.pointerId);if(!p)return;p.x=sx;p.y=sy;
