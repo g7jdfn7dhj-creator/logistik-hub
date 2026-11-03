@@ -1,4 +1,9 @@
-# Logistik-Hub v5.3.1 — PWA (Lagerlayout-Editor)
+# Logistik-Hub v5.3.2 — PWA (Lagerlayout-Editor)
+
+## Neu in v5.3.2 (nur Darstellung — Funktionen, IDs, Maße, Kollisionen, Wege, Daten, Speicherschlüssel und i18n unverändert)
+- **Modernere 3D-Optik:** abgerundete/gefaste Kanten statt Kisten (inline erzeugte Rounded-Box-Geometrie, Bordsteine, Sockel, Gehäuse), runde Rohre/Beine/Räder (mehr Radialsegmente), Reifen mit Felgen, LKW-Fahrerhaus mit Scheiben, Spiegeln, Scheinwerfern; Stapler mit Mast-Profilen, Gabeln, Überkopfschutz, Kapselkörper-Logistiker mit Helm; Regale mit Traversen, Diagonalstreben, Fußplatten und Anfahrschutz; Entlade-/Lagerflächen mit Bordstein und Fugen; Trennwände mit Rahmen und Fuß; 18 Bibliotheksobjekte neu modelliert; Hallenwände mit Pilastern/Sockel, Dachträger; Werksgelände mit gerundeten Gebäuden, Vordächern, Pkw mit Dach/Reifen, weichen Bäumen.
+- **Beleuchtung/Materialien:** kleine prozedurale Umgebungsbeleuchtung (PMREM, halle wird erst beim ersten Betreten erzeugt), Klarlack auf Fahrzeuglack, weiche Kontaktschatten; Geometrien werden geteilt/gecacht und pro Material zusammengeführt bzw. instanziert; Segmentzahlen werden auf Smartphones/schwachen Geräten begrenzt (Qualität weiterhin automatisch, Einstellung „Grafik“ unverändert).
+- Cache-Name `lhub-pwa-v5-3-2`.
 
 ## Neu in v5.3.1
 - Höhen-Seitenansicht im 2D-Plan ein-/ausblendbar (Schaltfläche „Höhen“, Zustand lokal gespeichert, auf Smartphones standardmäßig eingeklappt); Einheiten im RU-Editor „м“.
